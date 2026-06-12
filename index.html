@@ -1,0 +1,1799 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRIMORDIS — Human Configuration Navigation</title>
+<meta name="description" content="Understanding how configuration influences state, performance and potential realization. A research-driven navigation platform.">
+<!--
+  PRIMORDIS · Home Architecture v1.0 (FROZEN)
+  01 Hero · 02 Human State · 03 Human Configuration · 04 Symptom Explorer
+  05 Assessment · 06 Navigation Framework · 07 Research Program
+  08 Case Library · 09 FAQ · 10 Start Navigation
+
+  Reserved Cloudflare routes:
+  /  /framework  /assessment  /research  /cases  /faq
+  /knowledge  /atlas  /primordocciput  /anthroponomy  /start
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;1,300;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --maxw: 1080px;
+  --font-display: 'Spectral', Georgia, serif;
+  --font-body: 'IBM Plex Sans', -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', 'SF Mono', monospace;
+}
+html[data-theme="dark"]{
+  --bg:#101418;
+  --bg-soft:#141A20;
+  --surface:#1A2129;
+  --surface-2:#1F2731;
+  --text:#E6EAED;
+  --text-soft:#C3CBD2;
+  --muted:#8E99A3;
+  --line:#2B343E;
+  --line-soft:#222B34;
+  --accent:#D2904F;
+  --accent-soft:rgba(210,144,79,.14);
+  --accent-2:#86A9BD;
+  --header-bg:rgba(16,20,24,.82);
+  --shadow:0 10px 34px rgba(0,0,0,.35);
+}
+html[data-theme="light"]{
+  --bg:#F2F3F1;
+  --bg-soft:#ECEEEC;
+  --surface:#FAFBFA;
+  --surface-2:#FFFFFF;
+  --text:#21262B;
+  --text-soft:#3A434B;
+  --muted:#5C6770;
+  --line:#D7DCDE;
+  --line-soft:#E2E6E7;
+  --accent:#A05A19;
+  --accent-soft:rgba(160,90,25,.10);
+  --accent-2:#3E6478;
+  --header-bg:rgba(242,243,241,.85);
+  --shadow:0 10px 30px rgba(30,40,50,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font-body);
+  font-size:16px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  transition:background .35s ease, color .35s ease;
+}
+::selection{background:var(--accent-soft);}
+a{color:inherit;}
+img,svg{display:block;max-width:100%;}
+
+/* ---------- structural spine (decor) ---------- */
+.spine{position:fixed;left:34px;top:0;bottom:0;width:1px;background:var(--line-soft);z-index:0;}
+@media(max-width:1180px){.spine{display:none;}}
+
+/* ---------- header ---------- */
+header{
+  position:sticky;top:0;z-index:50;
+  background:var(--header-bg);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line-soft);
+}
+.header-in{
+  max-width:var(--maxw);margin:0 auto;padding:0 24px;
+  height:64px;display:flex;align-items:center;gap:28px;
+}
+.logo{display:flex;align-items:center;gap:11px;text-decoration:none;}
+.logo-mark{width:14px;height:26px;position:relative;flex:none;}
+.logo-mark::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:1.5px;background:var(--text);transform:translateX(-50%);}
+.logo-mark::after{content:"";position:absolute;left:50%;top:5px;width:7px;height:7px;border-radius:50%;background:var(--accent);transform:translateX(calc(-50% + 4px));}
+.logo-word{font-family:var(--font-body);font-weight:600;letter-spacing:.22em;font-size:14px;}
+nav.main{display:flex;gap:22px;margin-left:auto;}
+nav.main a{font-size:13.5px;color:var(--muted);text-decoration:none;transition:color .2s;}
+nav.main a:hover{color:var(--text);}
+.controls{display:flex;align-items:center;gap:10px;margin-left:18px;}
+.lang{display:flex;border:1px solid var(--line);border-radius:7px;overflow:hidden;}
+.lang button{
+  font-family:var(--font-mono);font-size:13px;padding:5px 9px;border:none;cursor:pointer;
+  background:transparent;color:var(--muted);transition:.2s;
+}
+.lang button.on{background:var(--accent-soft);color:var(--accent);font-weight:500;}
+.theme-btn{
+  width:34px;height:32px;border:1px solid var(--line);border-radius:7px;cursor:pointer;
+  background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;transition:.2s;
+}
+.theme-btn:hover{color:var(--text);border-color:var(--muted);}
+@media(max-width:980px){nav.main{display:none;}.controls{margin-left:auto;}}
+
+/* ---------- shared ---------- */
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;position:relative;z-index:1;}
+section{padding:92px 0;border-bottom:1px solid var(--line-soft);}
+section:last-of-type{border-bottom:none;}
+.eyebrow{
+  font-family:var(--font-mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--accent);display:flex;align-items:center;gap:12px;margin-bottom:18px;
+}
+.eyebrow::before{content:"";width:26px;height:1px;background:var(--accent);}
+h1,h2,h3{font-family:var(--font-display);font-weight:400;line-height:1.18;}
+h2{font-size:clamp(28px,4vw,40px);margin-bottom:18px;letter-spacing:-.01em;}
+.lead{font-size:17.5px;color:var(--text-soft);max-width:700px;}
+.note{
+  margin-top:30px;padding:16px 20px;border-left:2px solid var(--accent);
+  background:var(--accent-soft);border-radius:0 8px 8px 0;
+  font-size:14px;color:var(--text-soft);max-width:700px;
+}
+.note b{color:var(--text);font-weight:600;}
+.grid{display:grid;gap:18px;margin-top:42px;}
+.g3{grid-template-columns:repeat(3,1fr);}
+.g4{grid-template-columns:repeat(2,1fr);}
+@media(max-width:860px){.g3{grid-template-columns:1fr;}.g4{grid-template-columns:1fr;}}
+.card{
+  background:var(--surface);border:1px solid var(--line-soft);border-radius:12px;
+  padding:26px 24px;transition:border-color .25s, transform .25s;
+}
+.card:hover{border-color:var(--line);transform:translateY(-2px);}
+.card h3{font-family:var(--font-body);font-weight:600;font-size:16px;margin-bottom:10px;}
+.card p{font-size:14.5px;color:var(--muted);line-height:1.6;}
+.card .tag{
+  font-family:var(--font-mono);font-size:12.5px;color:var(--accent);
+  display:block;margin-bottom:12px;letter-spacing:.08em;
+}
+.close-line{
+  margin-top:38px;font-family:var(--font-display);font-style:italic;
+  font-size:20px;color:var(--text-soft);max-width:640px;
+}
+.tools-line{
+  margin-top:24px;font-family:var(--font-mono);font-size:13px;color:var(--muted);
+  display:flex;align-items:center;gap:10px;max-width:700px;
+}
+.tools-line::before{content:"▸";color:var(--accent);}
+
+/* ---------- hero ---------- */
+.hero{padding:96px 0 100px;border-bottom:1px solid var(--line-soft);}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:64px;align-items:center;}
+@media(max-width:920px){.hero-grid{grid-template-columns:1fr;gap:48px;}}
+.hero h1{font-size:clamp(36px,5.2vw,56px);letter-spacing:-.015em;margin:0 0 22px;}
+.hero h1 em{font-style:italic;color:var(--accent);}
+.hero .sub{font-size:18px;color:var(--text-soft);max-width:560px;margin-bottom:34px;}
+.cta-row{display:flex;gap:14px;flex-wrap:wrap;align-items:center;}
+.btn{
+  display:inline-flex;align-items:center;gap:9px;text-decoration:none;border-radius:9px;
+  font-size:15px;font-weight:500;padding:13px 24px;transition:.22s;cursor:pointer;border:1px solid transparent;
+}
+.btn-primary{background:var(--accent);color:#14110C;}
+html[data-theme="light"] .btn-primary{color:#FFF8F0;}
+.btn-primary:hover{filter:brightness(1.08);transform:translateY(-1px);}
+.btn-ghost{border-color:var(--line);color:var(--text-soft);}
+.btn-ghost:hover{border-color:var(--muted);color:var(--text);}
+.hero-note{margin-top:26px;font-family:var(--font-mono);font-size:13px;color:var(--muted);letter-spacing:.02em;}
+.principle{
+  margin-top:34px;padding-top:24px;border-top:1px solid var(--line-soft);max-width:560px;
+}
+.principle .p-label{
+  font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:6px;
+}
+.principle .p-text{
+  font-family:var(--font-display);font-style:italic;font-size:21px;color:var(--text-soft);
+}
+.fig{position:relative;}
+.fig-caption{margin-top:14px;font-family:var(--font-mono);font-size:12.5px;color:var(--muted);text-align:center;}
+.axis-svg .ref{stroke:var(--text-soft);stroke-width:1.4;}
+.axis-svg .tick{stroke:var(--line);stroke-width:1;}
+.axis-svg .node{fill:var(--accent);}
+.axis-svg .node-ring{fill:none;stroke:var(--accent);stroke-width:1;opacity:.45;}
+.axis-svg .arrow-head{fill:var(--muted);}
+.axis-svg text{font-family:var(--font-mono);font-size:11.5px;fill:var(--muted);}
+.axis-svg .lbl{fill:var(--text);font-size:13.5px;font-weight:500;letter-spacing:.1em;}
+.axis-svg .stage{opacity:0;}
+@media(prefers-reduced-motion:no-preference){
+  .axis-svg .ref{stroke-dasharray:520;stroke-dashoffset:520;animation:draw 1.5s ease forwards .2s;}
+  .axis-svg .stage1{animation:fadein .7s ease forwards .6s;}
+  .axis-svg .stage2{animation:fadein .7s ease forwards 1.1s;}
+  .axis-svg .stage3{animation:fadein .7s ease forwards 1.6s;}
+  @keyframes draw{to{stroke-dashoffset:0;}}
+  @keyframes fadein{to{opacity:1;}}
+}
+@media(prefers-reduced-motion:reduce){.axis-svg .stage{opacity:1;}}
+
+/* ---------- chips (state) ---------- */
+.chips{display:flex;flex-wrap:wrap;gap:12px;margin-top:36px;max-width:700px;}
+.chip{
+  font-family:var(--font-mono);font-size:13.5px;color:var(--text-soft);
+  border:1px solid var(--line);border-radius:999px;padding:9px 18px;background:var(--surface);
+}
+
+/* ---------- schema panel (case library) ---------- */
+.map-panel{
+  margin-top:42px;background:var(--surface);border:1px solid var(--line-soft);
+  border-radius:14px;overflow:hidden;box-shadow:var(--shadow);
+}
+.map-row{display:grid;grid-template-columns:230px 1fr;border-bottom:1px solid var(--line-soft);}
+.map-row:last-child{border-bottom:none;}
+.map-key{
+  font-family:var(--font-mono);font-size:13px;color:var(--accent);padding:22px 24px;
+  border-right:1px solid var(--line-soft);display:flex;align-items:center;gap:10px;letter-spacing:.04em;
+}
+.map-key .k{color:var(--muted);}
+.map-val{padding:22px 24px;font-size:14.5px;color:var(--text-soft);}
+@media(max-width:680px){.map-row{grid-template-columns:1fr;}.map-key{border-right:none;padding-bottom:4px;}.map-val{padding-top:6px;}}
+
+/* ---------- FAQ ---------- */
+.faq{max-width:760px;margin-top:36px;}
+details{border-bottom:1px solid var(--line-soft);}
+details summary{
+  list-style:none;cursor:pointer;padding:22px 36px 22px 0;position:relative;
+  font-family:var(--font-display);font-size:19px;transition:color .2s;
+}
+details summary::-webkit-details-marker{display:none;}
+details summary::after{
+  content:"+";position:absolute;right:4px;top:50%;transform:translateY(-50%);
+  font-family:var(--font-mono);color:var(--accent);font-size:19px;transition:transform .25s;
+}
+details[open] summary::after{transform:translateY(-50%) rotate(45deg);}
+details .a{padding:0 0 24px;font-size:15px;color:var(--text-soft);max-width:680px;line-height:1.7;}
+
+/* ---------- navigation cycle ---------- */
+.cycle{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:40px;}
+.step{
+  display:flex;align-items:center;gap:10px;background:var(--surface);
+  border:1px solid var(--line-soft);border-radius:10px;padding:13px 18px;
+}
+.step .num{font-family:var(--font-mono);font-size:12.5px;color:var(--accent);}
+.step .name{font-size:14.5px;font-weight:500;}
+.arrow{color:var(--muted);font-family:var(--font-mono);font-size:14px;}
+.cycle-back{
+  width:100%;margin-top:6px;font-family:var(--font-mono);font-size:12.5px;color:var(--muted);
+  display:flex;align-items:center;gap:10px;
+}
+.cycle-back::before{content:"↺";color:var(--accent);font-size:15px;}
+
+/* ---------- start ---------- */
+.final-cta{margin-top:46px;display:flex;gap:18px;align-items:center;flex-wrap:wrap;}
+.final-note{font-family:var(--font-display);font-style:italic;font-size:17px;color:var(--muted);}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--line-soft);padding:48px 0 56px;background:var(--bg-soft);}
+.foot-grid{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;}
+.foot-left p{font-size:14px;color:var(--muted);}
+.foot-left p:first-child{color:var(--text-soft);font-weight:500;margin-bottom:6px;}
+.foot-right{font-family:var(--font-mono);font-size:12.5px;color:var(--muted);text-align:right;line-height:2;}
+@media(max-width:680px){.foot-right{text-align:left;}}
+
+/* ---------- reveal ---------- */
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .7s ease, transform .7s ease;}
+.reveal.in{opacity:1;transform:none;}
+@media(prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none;}
+  html{scroll-behavior:auto;}
+}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px;}
+
+/* ---------- RTL (Arabic) ---------- */
+html[dir="rtl"] .eyebrow::before{margin-right:0;margin-left:0;order:1;}
+html[dir="rtl"] .eyebrow{flex-direction:row-reverse;}
+html[dir="rtl"] .map-key{border-right:none;border-left:1px solid var(--line-soft);}
+html[dir="rtl"] .note{border-left:none;border-right:2px solid var(--accent);border-radius:8px 0 0 8px;}
+html[dir="rtl"] .tools-line::before{content:"◂";}
+html[dir="rtl"] .cycle-back::before{content:"↻";}
+html[dir="rtl"] .spine{left:auto;right:34px;}
+html[dir="rtl"] nav.main{margin-left:0;margin-right:auto;}
+
+/* ---------- lang strip — 9 buttons ---------- */
+.lang{display:flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:7px;overflow:hidden;max-width:320px;}
+.lang button{flex:1 1 auto;min-width:32px;}
+
+/* ---------- mobile ---------- */
+@media(max-width:600px){
+  section{padding:60px 0;}
+  .hero{padding:60px 0 68px;}
+  .wrap{padding:0 16px;}
+  .header-in{gap:10px;height:58px;}
+  nav.main{display:none;}
+  .controls{margin-left:auto;gap:6px;}
+  .lang{
+    max-width:calc(100vw - 160px);
+    flex-wrap:nowrap;overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .lang::-webkit-scrollbar{display:none;}
+  .lang button{padding:4px 7px;font-size:11.5px;white-space:nowrap;flex:none;}
+  .theme-btn{width:30px;height:28px;}
+  .hero h1{font-size:clamp(28px,7.5vw,38px);}
+  .hero .sub{font-size:16px;}
+  .hero-grid{gap:36px;}
+  h2{font-size:clamp(22px,6vw,30px);}
+  .lead{font-size:16px;}
+  .g3{grid-template-columns:1fr;}
+  .g4{grid-template-columns:1fr;}
+  .map-row{grid-template-columns:1fr;}
+  .map-key{border-right:none;padding-bottom:4px;}
+  .map-val{padding-top:6px;}
+  .cycle{gap:8px;}
+  .step{padding:10px 14px;}
+  .dims{flex-direction:column;}
+  .dim{border-right:none;border-bottom:1px solid var(--line-soft);}
+  .dim:last-child{border-bottom:none;}
+  .axis-svg{max-height:420px;}
+}
+@media(max-width:480px){
+  .lang button{padding:4px 5px;font-size:11px;}
+  .logo-word{font-size:12.5px;}
+}
+</style>
+</head>
+<body>
+<div class="spine" aria-hidden="true"></div>
+
+<header>
+  <div class="header-in">
+    <a class="logo" href="#top" aria-label="PRIMORDIS — home">
+      <span class="logo-mark" aria-hidden="true"></span>
+      <span class="logo-word">PRIMORDIS</span>
+    </a>
+    <nav class="main" aria-label="Main">
+      <a href="#top" data-i18n="nav_home"></a>
+      <a href="#framework" data-i18n="nav_framework"></a>
+      <a href="#assessment" data-i18n="nav_assessment"></a>
+      <a href="#research" data-i18n="nav_research"></a>
+      <a href="#cases" data-i18n="nav_cases"></a>
+      <a href="#faq" data-i18n="nav_faq"></a>
+    </nav>
+    <div class="controls">
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang="en">EN</button>
+        <button type="button" data-lang="de">DE</button>
+        <button type="button" data-lang="ru">RU</button>
+        <button type="button" data-lang="es">ES</button>
+        <button type="button" data-lang="fr">FR</button>
+        <button type="button" data-lang="ar">AR</button>
+        <button type="button" data-lang="zh">中文</button>
+        <button type="button" data-lang="ja">日本語</button>
+        <button type="button" data-lang="ko">한국어</button>
+      </div>
+      <button type="button" class="theme-btn" id="themeBtn" aria-label="Toggle theme">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" id="themeIcon">
+          <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- 01 · HERO -->
+<div class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow" data-i18n="hero_eyebrow"></div>
+      <h1 data-i18n="hero_title"></h1>
+      <p class="sub" data-i18n="hero_sub"></p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#start" data-i18n="hero_cta1"></a>
+        <a class="btn btn-ghost" href="#state" data-i18n="hero_cta2"></a>
+      </div>
+      <p class="hero-note" data-i18n="hero_note"></p>
+      <div class="principle">
+        <div class="p-label" data-i18n="hero_principle_label"></div>
+        <div class="p-text" data-i18n="hero_principle"></div>
+      </div>
+    </div>
+    <div class="fig">
+      <svg class="axis-svg" viewBox="0 0 340 540" role="img" aria-label="Schematic: state emerges from configuration; configuration is changed through navigation">
+        <!-- ruler ticks -->
+        <g>
+          <line class="tick" x1="92" y1="60"  x2="100" y2="60"/>
+          <line class="tick" x1="92" y1="110" x2="100" y2="110"/>
+          <line class="tick" x1="92" y1="160" x2="100" y2="160"/>
+          <line class="tick" x1="92" y1="210" x2="100" y2="210"/>
+          <line class="tick" x1="92" y1="260" x2="100" y2="260"/>
+          <line class="tick" x1="92" y1="310" x2="100" y2="310"/>
+          <line class="tick" x1="92" y1="360" x2="100" y2="360"/>
+          <line class="tick" x1="92" y1="410" x2="100" y2="410"/>
+          <line class="tick" x1="92" y1="460" x2="100" y2="460"/>
+        </g>
+        <!-- vertical reference axis -->
+        <line class="ref" x1="100" y1="36" x2="100" y2="510"/>
+        <!-- arrowheads on axis between nodes -->
+        <polygon class="arrow-head stage stage2" points="96,180 104,180 100,190"/>
+        <polygon class="arrow-head stage stage3" points="96,345 104,345 100,355"/>
+        <!-- STATE node -->
+        <g class="stage stage1">
+          <circle class="node-ring" cx="100" cy="105" r="13"/>
+          <circle class="node" cx="100" cy="105" r="5"/>
+          <text class="lbl" x="128" y="101" data-i18n="ax_s1"></text>
+          <text x="128" y="118" data-i18n="ax_s1b"></text>
+        </g>
+        <!-- CONFIGURATION node -->
+        <g class="stage stage2">
+          <circle class="node-ring" cx="100" cy="270" r="13"/>
+          <circle class="node" cx="100" cy="270" r="5"/>
+          <text class="lbl" x="128" y="266" data-i18n="ax_s2"></text>
+          <text x="128" y="283" data-i18n="ax_s2b"></text>
+        </g>
+        <!-- NAVIGATION node -->
+        <g class="stage stage3">
+          <circle class="node-ring" cx="100" cy="435" r="13"/>
+          <circle class="node" cx="100" cy="435" r="5"/>
+          <text class="lbl" x="128" y="431" data-i18n="ax_s3"></text>
+          <text x="128" y="448" data-i18n="ax_s3b"></text>
+        </g>
+      </svg>
+      <p class="fig-caption" data-i18n="hero_fig"></p>
+    </div>
+  </div>
+</div>
+
+<!-- 02 · HUMAN STATE -->
+<section id="state">
+  <div class="wrap reveal">
+    <div class="eyebrow" data-i18n="s2_eyebrow"></div>
+    <h2 data-i18n="s2_title"></h2>
+    <p class="lead" data-i18n="s2_lead"></p>
+    <div class="chips">
+      <span class="chip" data-i18n="s2_ch1"></span>
+      <span class="chip" data-i18n="s2_ch2"></span>
+      <span class="chip" data-i18n="s2_ch3"></span>
+      <span class="chip" data-i18n="s2_ch4"></span>
+      <span class="chip" data-i18n="s2_ch5"></span>
+      <span class="chip" data-i18n="s2_ch6"></span>
+    </div>
+    <div class="note" data-i18n="s2_note"></div>
+  </div>
+</section>
+
+<!-- 03 · HUMAN CONFIGURATION -->
+<section id="configuration">
+  <div class="wrap reveal">
+    <div class="eyebrow" data-i18n="s3_eyebrow"></div>
+    <h2 data-i18n="s3_title"></h2>
+    <p class="lead" data-i18n="s3_lead"></p>
+    <div class="grid g4">
+      <div class="card"><h3 data-i18n="s3_l1t"></h3><p data-i18n="s3_l1b"></p></div>
+      <div class="card"><h3 data-i18n="s3_l2t"></h3><p data-i18n="s3_l2b"></p></div>
+      <div class="card"><h3 data-i18n="s3_l3t"></h3><p data-i18n="s3_l3b"></p></div>
+      <div class="card"><h3 data-i18n="s3_l4t"></h3><p data-i18n="s3_l4b"></p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 · SYMPTOM EXPLORER -->
+<section id="symptoms">
+  <div class="wrap reveal">
+    <div class="eyebrow" data-i18n="s4_eyebrow"></div>
+    <h2 data-i18n="s4_title"></h2>
+    <p class="lead" data-i18n="s4_lead"></p>
+    <div class="grid g3">
+      <div class="card"><span class="tag" data-i18n="s4_c1tag"></span><h3 data-i18n="s4_c1t"></h3><p data-i18n="s4_c1b"></p></div>
+      <div class="card"><span class="tag" data-i18n="s4_c2tag"></span><h3 data-i18n="s4_c2t"></h3><p data-i18n="s4_c2b"></p></div>
+      <div class="card"><span class="tag" data-i18n="s4_c3tag"></span><h3 data-i18n="s4_c3t"></h3><p data-i18n="s4_c3b"></p></div>
+      <div class="card"><span class="tag" data-i18n="s4_c4tag"></span><h3 data-i18n="s4_c4t"></h3><p data-i18n="s4_c4b"></p></div>
+      <div class="card"><span class="tag" data-i18n="s4_c5tag"></span><h3 data-i18n="s4_c5t"></h3><p data-i18n="s4_c5b"></p></div>
+      <div class="card"><span class="tag" data-i18n="s4_c6tag"></span><h3 data-i18n="s4_c6t"></h3><p data-i18n="s4_c6b"></p></div>
+    </div>
+    <p class="close-line" data-i18n="s4_close"></p>
+  </div>
+</section>
+
+<!-- 05 · ASSESSMENT -->
+<section id="assessment">
+  <div class="wrap reveal">
+    <div class="eyebrow" data-i18n="s5_eyebrow"></div>
+    <h2 data-i18n="s5_title"></h2>
+    <p class="lead" data-i18n="s5_lead"></p>
+    <div class="grid g4">
+      <div class="card"><span class="tag" data-i18n="s5_a1tag"></span><h3 data-i18n="s5_a1t"></h3><p data-i18n="s5_a1b"></p></div>
+      <div class="card"><span class="tag" data-i18n="s5_a2tag"></span><h3 data-i18n="s5_a2t"></h3><p data-i18n="s5_a2b"></p></div>
+      <div class="card"><span class="tag" data-i18n="s5_a3tag"></span><h3 data-i18n="s5_a3t"></h3><p data-i18n="s5_a3b"></p></div>
+      <div class="card"><span class="tag" data-i18n="s5_a4tag"></span><h3 data-i18n="s5_a4t"></h3><p data-i18n="s5_a4b"></p></div>
+    </div>
+    <p class="tools-line" data-i18n="s5_tools"></p>
+    <div class="note" data-i18n="s5_note"></div>
+  </div>
+</section>
+
+<!-- 06 · NAVIGATION FRAMEWORK -->
+<section id="framework">
+  <div class="wrap reveal">
+    <div class="eyebrow" data-i18n="s6_eyebrow"></div>
+    <h2 data-i18n="s6_title"></h2>
+    <p class="lead" data-i18n="s6_lead"></p>
+    <div class="cycle">
+      <div class="step"><span class="num">1</span><span class="name" data-i18n="s6_st1"></span></div><span class="arrow">→</span>
+      <div class="step"><span class="num">2</span><span class="name" data-i18n="s6_st2"></span></div><span class="arrow">→</span>
+      <div class="step"><span class="num">3</span><span class="name" data-i18n="s6_st3"></span></div><span class="arrow">→</span>
+      <div class="step"><span class="num">4</span><span class="name" data-i18n="s6_st4"></span></div><span class="arrow">→</span>
+      <div class="step"><span class="num">5</span><span class="name" data-i18n="s6_st5"></span></div><span class="arrow">→</span>
+      <div class="step"><span class="num">6</span><span class="name" data-i18n="s6_st6"></span></div><span class="arrow">→</span>
+      <div class="step"><span class="num">7</span><span class="name" data-i18n="s6_st7"></span></div>
+      <div class="cycle-back" data-i18n="s6_back"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 · RESEARCH PROGRAM -->
+<section id="research">
+  <div class="wrap reveal">
+    <div class="eyebrow" data-i18n="s7_eyebrow"></div>
+    <h2 data-i18n="s7_title"></h2>
+    <p class="lead" data-i18n="s7_lead"></p>
+    <div class="grid g4">
+      <div class="card"><span class="tag" data-i18n="s7_r1tag"></span><h3 data-i18n="s7_r1t"></h3><p data-i18n="s7_r1b"></p></div>
+      <div class="card"><span class="tag" data-i18n="s7_r2tag"></span><h3 data-i18n="s7_r2t"></h3><p data-i18n="s7_r2b"></p></div>
+      <div class="card"><span class="tag" data-i18n="s7_r3tag"></span><h3 data-i18n="s7_r3t"></h3><p data-i18n="s7_r3b"></p></div>
+      <div class="card"><span class="tag" data-i18n="s7_r4tag"></span><h3 data-i18n="s7_r4t"></h3><p data-i18n="s7_r4b"></p></div>
+    </div>
+    <div class="note" data-i18n="s7_note"></div>
+  </div>
+</section>
+
+<!-- 08 · CASE LIBRARY -->
+<section id="cases">
+  <div class="wrap reveal">
+    <div class="eyebrow" data-i18n="s8_eyebrow"></div>
+    <h2 data-i18n="s8_title"></h2>
+    <p class="lead" data-i18n="s8_lead"></p>
+    <div class="map-panel">
+      <div class="map-row"><div class="map-key"><span class="k">01</span><span data-i18n="s8_d1k"></span></div><div class="map-val" data-i18n="s8_d1v"></div></div>
+      <div class="map-row"><div class="map-key"><span class="k">02</span><span data-i18n="s8_d2k"></span></div><div class="map-val" data-i18n="s8_d2v"></div></div>
+      <div class="map-row"><div class="map-key"><span class="k">03</span><span data-i18n="s8_d3k"></span></div><div class="map-val" data-i18n="s8_d3v"></div></div>
+      <div class="map-row"><div class="map-key"><span class="k">04</span><span data-i18n="s8_d4k"></span></div><div class="map-val" data-i18n="s8_d4v"></div></div>
+      <div class="map-row"><div class="map-key"><span class="k">05</span><span data-i18n="s8_d5k"></span></div><div class="map-val" data-i18n="s8_d5v"></div></div>
+    </div>
+    <div class="note" data-i18n="s8_disc"></div>
+  </div>
+</section>
+
+<!-- 09 · FAQ -->
+<section id="faq">
+  <div class="wrap reveal">
+    <div class="eyebrow" data-i18n="s9_eyebrow"></div>
+    <h2 data-i18n="s9_title"></h2>
+    <div class="faq">
+      <details><summary data-i18n="s9_q1"></summary><div class="a" data-i18n="s9_a1"></div></details>
+      <details><summary data-i18n="s9_q2"></summary><div class="a" data-i18n="s9_a2"></div></details>
+      <details><summary data-i18n="s9_q3"></summary><div class="a" data-i18n="s9_a3"></div></details>
+      <details><summary data-i18n="s9_q4"></summary><div class="a" data-i18n="s9_a4"></div></details>
+      <details><summary data-i18n="s9_q5"></summary><div class="a" data-i18n="s9_a5"></div></details>
+    </div>
+  </div>
+</section>
+
+<!-- 10 · START NAVIGATION -->
+<section id="start">
+  <div class="wrap reveal">
+    <div class="eyebrow" data-i18n="s10_eyebrow"></div>
+    <h2 data-i18n="s10_title"></h2>
+    <p class="lead" data-i18n="s10_lead"></p>
+    <div class="final-cta">
+      <a class="btn btn-primary" href="#" data-i18n="s10_cta"></a>
+      <span class="final-note" data-i18n="s10_note"></span>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap foot-grid">
+    <div class="foot-left">
+      <p data-i18n="f_line1"></p>
+      <p data-i18n="f_line2"></p>
+    </div>
+    <div class="foot-email">
+      <a href="mailto:info@primordis.org" style="font-family:var(--font-mono);font-size:13px;color:var(--muted);text-decoration:none;transition:.2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">info@primordis.org</a>
+    </div>
+    <div class="foot-right">
+      <div data-i18n="f_disc"></div>
+      <div data-i18n="f_rights"></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const I18N = {
+en:{
+  nav_home:"Home", nav_framework:"Framework", nav_assessment:"Assessment", nav_research:"Research", nav_cases:"Cases", nav_faq:"FAQ",
+  hero_eyebrow:"PRIMORDIS — research-driven platform",
+  hero_title:"Human Configuration <em>Navigation</em>",
+  hero_sub:"Understanding how configuration influences state, performance and potential realization.",
+  hero_cta1:"Begin navigation", hero_cta2:"Explore the framework",
+  hero_note:"Not a clinic. Not a treatment service. A navigation platform.",
+  hero_principle_label:"constitutional principle 01",
+  hero_principle:"Configuration precedes perception.",
+  ax_s1:"STATE", ax_s1b:"what you feel",
+  ax_s2:"CONFIGURATION", ax_s2b:"what shapes it",
+  ax_s3:"NAVIGATION", ax_s3b:"how change is guided",
+  hero_fig:"Schematic illustration of the framework — not an anatomical rendering.",
+
+  s2_eyebrow:"01 · Human State", s2_title:"You feel state — not configuration.",
+  s2_lead:"Energy, focus, clarity, emotional stability, sleep, resilience — state is how life is actually experienced. PRIMORDIS begins where you begin: with state. It then traces state down through the interacting layers it emerges from — structural, neurological, vascular, metabolic, behavioral.",
+  s2_ch1:"Energy", s2_ch2:"Focus", s2_ch3:"Clarity", s2_ch4:"Emotional stability", s2_ch5:"Sleep", s2_ch6:"Resilience",
+  s2_note:"<b>Epistemic status:</b> in documented observations, changes in configuration are frequently accompanied by changes in state. This is an association under study — not a medical claim.",
+
+  s3_eyebrow:"02 · Human Configuration", s3_title:"What is human configuration?",
+  s3_lead:"Configuration is the standing arrangement of structural relationships within which every other system operates: the position of the cranio-vertebral axis, the distribution of load, and the chains of compensation the body builds to keep the eyes level and the system upright.",
+  s3_l1t:"Structural axis", s3_l1b:"The vertical organization of head, spine and pelvis — the reference line of the whole system.",
+  s3_l2t:"Compensation chains", s3_l2b:"Adaptive counter-shifts that preserve balance at the cost of asymmetric load.",
+  s3_l3t:"Load distribution", s3_l3b:"How weight, tension and movement are shared — or concentrated — across the structure.",
+  s3_l4t:"Adaptive reserve", s3_l4b:"The remaining capacity to absorb new load before the system produces signals.",
+
+  s4_eyebrow:"03 · Symptom Explorer", s4_title:"Symptoms as coordinates.",
+  s4_lead:"Symptoms are real — but they are signals from interacting layers, not diagnoses. The Explorer organizes them as coordinates: which signals, on which side, in which combination, since when. Patterns of recurrence, migration and aggregation often say more than any single symptom.",
+  s4_c1tag:"category", s4_c1t:"Neurological", s4_c1b:"Headache, dizziness, tension patterns, sensory noise.",
+  s4_c2tag:"category", s4_c2t:"Musculoskeletal", s4_c2b:"Neck, back, jaw, pelvis — one-sided load and discomfort.",
+  s4_c3tag:"category", s4_c3t:"Cognitive", s4_c3b:"Focus, processing speed, mental fatigue, fog.",
+  s4_c4tag:"category", s4_c4t:"Emotional", s4_c4b:"Stability, irritability, background restlessness.",
+  s4_c5tag:"category", s4_c5t:"Sleep", s4_c5b:"Falling asleep, staying asleep, morning state.",
+  s4_c6tag:"category", s4_c6t:"Performance", s4_c6b:"Endurance, recovery, precision, consistency.",
+  s4_close:"Within PRIMORDIS, a symptom is never a verdict. It is a coordinate for navigation.",
+
+  s5_eyebrow:"04 · Assessment", s5_title:"Observe. Measure. Map. Prioritize.",
+  s5_lead:"Navigation begins with measurement. No recommendation is made before the current configuration has been observed and described.",
+  s5_a1tag:"step 1", s5_a1t:"Observe", s5_a1b:"Standing structure and movement are observed from defined reference points and documented.",
+  s5_a2tag:"step 2", s5_a2t:"Measure", s5_a2b:"Posture, movement patterns and structured self-observation turn impressions into comparable data.",
+  s5_a3tag:"step 3", s5_a3t:"Map", s5_a3b:"Results are assembled into an individual configuration map: axis deviation, compensation chains — a structured description, not a diagnosis.",
+  s5_a4tag:"step 4", s5_a4t:"Prioritize", s5_a4b:"The map defines the priority sequence: which layer to address first, and what to observe after each step.",
+  s5_tools:"Digital assessment tools — computer vision, structured questionnaires — in development.",
+  s5_note:"<b>Principle:</b> measurement precedes recommendation — always.",
+
+  s6_eyebrow:"05 · Navigation Framework", s6_title:"Navigation is more important than intervention.",
+  s6_lead:"PRIMORDIS treats change as a navigated cycle, not a single event. Every intervention is embedded between measurement and observation:",
+  s6_st1:"Assessment", s6_st2:"Mapping", s6_st3:"Prioritization", s6_st4:"Intervention", s6_st5:"Observation", s6_st6:"Reassessment", s6_st7:"Stability tracking",
+  s6_back:"the cycle repeats until stability is documented",
+
+  s7_eyebrow:"06 · Research Program", s7_title:"A research program, not a doctrine.",
+  s7_lead:"PRIMORDIS is built as an open research program. Its claims are organized so they can be tested — and, where wrong, corrected.",
+  s7_r1tag:"empirical base", s7_r1t:"Observations", s7_r1b:"3,500+ documented clinical observations form the empirical base: structured cases with timelines and follow-up.",
+  s7_r2tag:"under study", s7_r2t:"Hypotheses", s7_r2b:"The central hypothesis — Primordocciput — proposes a primary displacement point at the cranio-cervical junction (C0) from which systemic asymmetry may originate. It is stated as a hypothesis, not a fact.",
+  s7_r3tag:"testability", s7_r3t:"Falsification criteria", s7_r3b:"Each core claim is paired with conditions under which it would be considered false.",
+  s7_r4tag:"frontier", s7_r4t:"Open questions", s7_r4b:"Mechanisms, durability of change, population variability, and the boundaries of the framework remain open.",
+  s7_note:"<b>Design requirement:</b> observations and hypotheses are always labeled as such. Scientific humility is built into this platform.",
+
+  s8_eyebrow:"07 · Case Library", s8_title:"The Case Library.",
+  s8_lead:"A structured case library documents configurations over time. Every case is recorded along five dimensions — organized for comparison, not persuasion.",
+  s8_d1k:"Symptom Pattern", s8_d1v:"Which signals, on which side, in which combination — at the start of observation.",
+  s8_d2k:"Configuration Pattern", s8_d2v:"The structural picture: axis, compensations, load distribution.",
+  s8_d3k:"Timeline", s8_d3v:"Intervention history and the sequence of documented observations.",
+  s8_d4k:"Follow-Up", s8_d4v:"What is observed weeks and months later — without selection.",
+  s8_d5k:"Outcome Observation", s8_d5v:"What changed, what did not, and what remains open.",
+  s8_disc:"<b>Note:</b> cases are observational records. They illustrate the framework; they do not prove efficacy.",
+
+  s9_eyebrow:"08 · FAQ", s9_title:"Honest answers to fair questions.",
+  s9_q1:"Is PRIMORDIS a medical service?",
+  s9_a1:"No. PRIMORDIS is a research-driven navigation platform. It does not diagnose or treat disease, and it does not replace medical care. If you have a medical condition, consult a qualified physician.",
+  s9_q2:"What is established, and what is hypothesis?",
+  s9_a2:"Documented observations — structured case records — form the empirical layer. Explanatory claims, including the Primordocciput hypothesis, are explicitly labeled as hypotheses under study.",
+  s9_q3:"What does an assessment involve?",
+  s9_a3:"Visual and postural observation from defined reference points, movement patterns, and structured self-observation. The output is a configuration map, not a diagnosis.",
+  s9_q4:"What results should I expect?",
+  s9_a4:"No outcome is promised. The platform's commitment is different: measurement before recommendation, observation after every step, and honest documentation of what changes — and what does not.",
+  s9_q5:"How does PRIMORDIS relate to Anthroponomy?",
+  s9_a5:"PRIMORDIS is one applied method within the emerging discipline of Anthroponomy, which studies the chain from structural constraint to functional accessibility to potential realization. Data and methods developed here are designed to remain compatible with that broader framework.",
+
+  s10_eyebrow:"09 · Start Navigation", s10_title:"Begin navigation.",
+  s10_lead:"The first step is an assessment: your configuration is observed, measured and mapped. The route begins from the map.",
+  s10_cta:"Request an assessment",
+  s10_note:"You will not be sold to. You will be measured, mapped — and shown your own configuration.",
+
+  f_line1:"PRIMORDIS — Human Configuration Navigation Platform.",
+  f_line2:"Part of the emerging discipline of Anthroponomy.",
+  f_disc:"Educational and research content. Not medical advice.",
+  f_rights:"© 2026 PRIMORDIS. Observations and hypotheses labeled as such."
+},
+de:{
+  nav_home:"Start", nav_framework:"Framework", nav_assessment:"Erfassung", nav_research:"Forschung", nav_cases:"Fälle", nav_faq:"FAQ",
+  hero_eyebrow:"PRIMORDIS — forschungsorientierte Plattform",
+  hero_title:"Navigation der menschlichen <em>Konfiguration</em>",
+  hero_sub:"Verstehen, wie Konfiguration Zustand, Leistungsfähigkeit und Potenzialverwirklichung beeinflusst.",
+  hero_cta1:"Navigation beginnen", hero_cta2:"Framework erkunden",
+  hero_note:"Keine Klinik. Kein Behandlungsservice. Eine Navigationsplattform.",
+  hero_principle_label:"Konstitutionsprinzip 01",
+  hero_principle:"Konfiguration geht der Wahrnehmung voraus.",
+  ax_s1:"ZUSTAND", ax_s1b:"was Sie spüren",
+  ax_s2:"KONFIGURATION", ax_s2b:"was ihn formt",
+  ax_s3:"NAVIGATION", ax_s3b:"wie Veränderung geführt wird",
+  hero_fig:"Schematische Darstellung des Frameworks — keine anatomische Abbildung.",
+
+  s2_eyebrow:"01 · Menschlicher Zustand", s2_title:"Man spürt den Zustand — nicht die Konfiguration.",
+  s2_lead:"Energie, Fokus, Klarheit, emotionale Stabilität, Schlaf, Resilienz — der Zustand ist das, wie Leben tatsächlich erlebt wird. PRIMORDIS beginnt dort, wo Sie beginnen: beim Zustand. Und verfolgt ihn dann in die Tiefe — zu den interagierenden Schichten, aus denen er entsteht: strukturell, neurologisch, vaskulär, metabolisch, verhaltensbezogen.",
+  s2_ch1:"Energie", s2_ch2:"Fokus", s2_ch3:"Klarheit", s2_ch4:"Emotionale Stabilität", s2_ch5:"Schlaf", s2_ch6:"Resilienz",
+  s2_note:"<b>Epistemischer Status:</b> In dokumentierten Beobachtungen gehen Veränderungen der Konfiguration häufig mit Veränderungen des Zustands einher. Dies ist eine in Untersuchung befindliche Assoziation — keine medizinische Behauptung.",
+
+  s3_eyebrow:"02 · Menschliche Konfiguration", s3_title:"Was ist menschliche Konfiguration?",
+  s3_lead:"Konfiguration ist die bestehende Ordnung struktureller Beziehungen, innerhalb derer alle anderen Systeme arbeiten: die Position der kraniovertebralen Achse, die Lastverteilung und die Kompensationsketten, die der Körper aufbaut, um die Augen waagerecht und das System aufrecht zu halten.",
+  s3_l1t:"Strukturelle Achse", s3_l1b:"Die vertikale Organisation von Kopf, Wirbelsäule und Becken — die Referenzlinie des gesamten Systems.",
+  s3_l2t:"Kompensationsketten", s3_l2b:"Adaptive Gegenverschiebungen, die das Gleichgewicht erhalten — um den Preis asymmetrischer Last.",
+  s3_l3t:"Lastverteilung", s3_l3b:"Wie Gewicht, Spannung und Bewegung in der Struktur verteilt — oder konzentriert — werden.",
+  s3_l4t:"Adaptive Reserve", s3_l4b:"Die verbleibende Kapazität, neue Last aufzunehmen, bevor das System Signale erzeugt.",
+
+  s4_eyebrow:"03 · Symptom-Explorer", s4_title:"Symptome als Koordinaten.",
+  s4_lead:"Symptome sind real — aber sie sind Signale interagierender Schichten, keine Diagnosen. Der Explorer ordnet sie als Koordinaten: welche Signale, auf welcher Seite, in welcher Kombination, seit wann. Muster von Wiederkehr, Migration und Aggregation sagen oft mehr als jedes einzelne Symptom.",
+  s4_c1tag:"Kategorie", s4_c1t:"Neurologisch", s4_c1b:"Kopfschmerz, Schwindel, Spannungsmuster, sensorisches Rauschen.",
+  s4_c2tag:"Kategorie", s4_c2t:"Muskuloskelettal", s4_c2b:"Nacken, Rücken, Kiefer, Becken — einseitige Last und Beschwerden.",
+  s4_c3tag:"Kategorie", s4_c3t:"Kognitiv", s4_c3b:"Fokus, Verarbeitungsgeschwindigkeit, mentale Ermüdung, Nebel.",
+  s4_c4tag:"Kategorie", s4_c4t:"Emotional", s4_c4b:"Stabilität, Reizbarkeit, unterschwellige Unruhe.",
+  s4_c5tag:"Kategorie", s4_c5t:"Schlaf", s4_c5b:"Einschlafen, Durchschlafen, Morgenzustand.",
+  s4_c6tag:"Kategorie", s4_c6t:"Leistung", s4_c6b:"Ausdauer, Erholung, Präzision, Konstanz.",
+  s4_close:"Innerhalb von PRIMORDIS ist ein Symptom nie ein Urteil. Es ist eine Koordinate für Navigation.",
+
+  s5_eyebrow:"04 · Erfassung", s5_title:"Beobachten. Messen. Kartieren. Priorisieren.",
+  s5_lead:"Navigation beginnt mit Messung. Keine Empfehlung wird ausgesprochen, bevor die aktuelle Konfiguration beobachtet und beschrieben wurde.",
+  s5_a1tag:"Schritt 1", s5_a1t:"Beobachten", s5_a1b:"Struktur im Stand und Bewegung werden anhand definierter Referenzpunkte beobachtet und dokumentiert.",
+  s5_a2tag:"Schritt 2", s5_a2t:"Messen", s5_a2b:"Haltung, Bewegungsmuster und strukturierte Selbstbeobachtung machen aus Eindrücken vergleichbare Daten.",
+  s5_a3tag:"Schritt 3", s5_a3t:"Kartieren", s5_a3b:"Die Ergebnisse werden zu einer individuellen Konfigurationskarte zusammengeführt: Achsenabweichung, Kompensationsketten — eine strukturierte Beschreibung, keine Diagnose.",
+  s5_a4tag:"Schritt 4", s5_a4t:"Priorisieren", s5_a4b:"Die Karte definiert die Prioritätensequenz: mit welcher Schicht zu beginnen ist — und was nach jedem Schritt zu beobachten ist.",
+  s5_tools:"Digitale Erfassungswerkzeuge — Computer Vision, strukturierte Fragebögen — in Entwicklung.",
+  s5_note:"<b>Prinzip:</b> Messung geht der Empfehlung voraus — immer.",
+
+  s6_eyebrow:"05 · Navigations-Framework", s6_title:"Navigation ist wichtiger als Intervention.",
+  s6_lead:"PRIMORDIS behandelt Veränderung als navigierten Zyklus, nicht als einzelnes Ereignis. Jede Intervention ist zwischen Messung und Beobachtung eingebettet:",
+  s6_st1:"Erfassung", s6_st2:"Kartierung", s6_st3:"Priorisierung", s6_st4:"Intervention", s6_st5:"Beobachtung", s6_st6:"Neuerfassung", s6_st7:"Stabilitätsverfolgung",
+  s6_back:"Der Zyklus wiederholt sich, bis Stabilität dokumentiert ist",
+
+  s7_eyebrow:"06 · Forschungsprogramm", s7_title:"Ein Forschungsprogramm, keine Doktrin.",
+  s7_lead:"PRIMORDIS ist als offenes Forschungsprogramm aufgebaut. Seine Aussagen sind so organisiert, dass sie geprüft — und, wo falsch, korrigiert — werden können.",
+  s7_r1tag:"empirische Basis", s7_r1t:"Beobachtungen", s7_r1b:"3.500+ dokumentierte klinische Beobachtungen bilden die empirische Basis: strukturierte Fälle mit Zeitverläufen und Katamnese.",
+  s7_r2tag:"in Untersuchung", s7_r2t:"Hypothesen", s7_r2b:"Die zentrale Hypothese — Primordocciput — postuliert einen primären Verschiebungspunkt am kraniozervikalen Übergang (C0), von dem systemische Asymmetrie ausgehen könnte. Sie ist als Hypothese formuliert, nicht als Tatsache.",
+  s7_r3tag:"Prüfbarkeit", s7_r3t:"Falsifikationskriterien", s7_r3b:"Jede Kernaussage ist mit Bedingungen verknüpft, unter denen sie als widerlegt gälte.",
+  s7_r4tag:"Grenzbereich", s7_r4t:"Offene Fragen", s7_r4b:"Mechanismen, Dauerhaftigkeit von Veränderungen, Variabilität in der Population und die Grenzen des Frameworks bleiben offen.",
+  s7_note:"<b>Konstruktionsanforderung:</b> Beobachtungen und Hypothesen werden stets als solche gekennzeichnet. Wissenschaftliche Bescheidenheit ist in diese Plattform eingebaut.",
+
+  s8_eyebrow:"07 · Fallbibliothek", s8_title:"Die Fallbibliothek.",
+  s8_lead:"Eine strukturierte Fallbibliothek dokumentiert Konfigurationen über die Zeit. Jeder Fall wird entlang fünf Dimensionen erfasst — organisiert für Vergleich, nicht für Überzeugung.",
+  s8_d1k:"Symptommuster", s8_d1v:"Welche Signale, auf welcher Seite, in welcher Kombination — zu Beginn der Beobachtung.",
+  s8_d2k:"Konfigurationsmuster", s8_d2v:"Das strukturelle Bild: Achse, Kompensationen, Lastverteilung.",
+  s8_d3k:"Zeitverlauf", s8_d3v:"Interventionshistorie und die Abfolge dokumentierter Beobachtungen.",
+  s8_d4k:"Katamnese", s8_d4v:"Was Wochen und Monate später beobachtet wird — ohne Selektion.",
+  s8_d5k:"Ergebnisbeobachtung", s8_d5v:"Was sich verändert hat, was nicht — und was offen bleibt.",
+  s8_disc:"<b>Hinweis:</b> Fälle sind Beobachtungsaufzeichnungen. Sie illustrieren das Framework; sie beweisen keine Wirksamkeit.",
+
+  s9_eyebrow:"08 · FAQ", s9_title:"Ehrliche Antworten auf faire Fragen.",
+  s9_q1:"Ist PRIMORDIS ein medizinischer Dienst?",
+  s9_a1:"Nein. PRIMORDIS ist eine forschungsorientierte Navigationsplattform. Sie diagnostiziert und behandelt keine Krankheiten und ersetzt keine medizinische Versorgung. Bei einer medizinischen Erkrankung wenden Sie sich an eine qualifizierte Ärztin oder einen qualifizierten Arzt.",
+  s9_q2:"Was ist belegt, was ist Hypothese?",
+  s9_a2:"Dokumentierte Beobachtungen — strukturierte Fallaufzeichnungen — bilden die empirische Ebene. Erklärende Aussagen, einschließlich der Primordocciput-Hypothese, sind ausdrücklich als untersuchte Hypothesen gekennzeichnet.",
+  s9_q3:"Was umfasst eine Erfassung?",
+  s9_a3:"Visuelle und posturale Beobachtung anhand definierter Referenzpunkte, Bewegungsmuster und strukturierte Selbstbeobachtung. Das Ergebnis ist eine Konfigurationskarte, keine Diagnose.",
+  s9_q4:"Welche Ergebnisse sind zu erwarten?",
+  s9_a4:"Kein Ergebnis wird versprochen. Die Verpflichtung der Plattform ist eine andere: Messung vor Empfehlung, Beobachtung nach jedem Schritt und ehrliche Dokumentation dessen, was sich verändert — und was nicht.",
+  s9_q5:"Wie verhält sich PRIMORDIS zur Anthroponomie?",
+  s9_a5:"PRIMORDIS ist eine angewandte Methode innerhalb der entstehenden Disziplin der Anthroponomie, die die Kette von struktureller Einschränkung über funktionale Zugänglichkeit zur Potenzialverwirklichung untersucht. Daten und Methoden der Plattform sind so angelegt, dass sie mit diesem größeren Rahmen kompatibel bleiben.",
+
+  s10_eyebrow:"09 · Navigation beginnen", s10_title:"Navigation beginnen.",
+  s10_lead:"Der erste Schritt ist eine Erfassung: Ihre Konfiguration wird beobachtet, gemessen und kartiert. Die Route beginnt bei der Karte.",
+  s10_cta:"Erfassung anfragen",
+  s10_note:"Ihnen wird nichts verkauft. Sie werden gemessen, kartiert — und Ihnen wird Ihre eigene Konfiguration gezeigt.",
+
+  f_line1:"PRIMORDIS — Plattform zur Navigation der menschlichen Konfiguration.",
+  f_line2:"Teil der entstehenden Disziplin der Anthroponomie.",
+  f_disc:"Bildungs- und Forschungsinhalte. Keine medizinische Beratung.",
+  f_rights:"© 2026 PRIMORDIS. Beobachtungen und Hypothesen als solche gekennzeichnet."
+},
+ru:{
+  nav_home:"Главная", nav_framework:"Подход", nav_assessment:"Оценка", nav_research:"Исследования", nav_cases:"Случаи", nav_faq:"Вопросы",
+  hero_eyebrow:"PRIMORDIS — исследовательская платформа",
+  hero_title:"Навигация конфигурации <em>человека</em>",
+  hero_sub:"Понимание того, как конфигурация влияет на состояние, продуктивность и реализацию потенциала.",
+  hero_cta1:"Начать навигацию", hero_cta2:"Изучить подход",
+  hero_note:"Не клиника. Не сервис лечения. Навигационная платформа.",
+  hero_principle_label:"конституционный принцип 01",
+  hero_principle:"Конфигурация предшествует восприятию.",
+  ax_s1:"СОСТОЯНИЕ", ax_s1b:"что вы чувствуете",
+  ax_s2:"КОНФИГУРАЦИЯ", ax_s2b:"что его формирует",
+  ax_s3:"НАВИГАЦИЯ", ax_s3b:"как направлять изменение",
+  hero_fig:"Схематическая иллюстрация подхода — не анатомическое изображение.",
+
+  s2_eyebrow:"01 · Состояние человека", s2_title:"Человек чувствует состояние — а не конфигурацию.",
+  s2_lead:"Энергия, фокус, ясность, эмоциональная устойчивость, сон, резильентность — состояние и есть то, как жизнь переживается на самом деле. PRIMORDIS начинает там же, где начинаете вы: с состояния. А затем прослеживает его вглубь — к взаимодействующим слоям, из которых оно возникает: структурному, неврологическому, сосудистому, метаболическому, поведенческому.",
+  s2_ch1:"Энергия", s2_ch2:"Фокус", s2_ch3:"Ясность", s2_ch4:"Эмоциональная устойчивость", s2_ch5:"Сон", s2_ch6:"Резильентность",
+  s2_note:"<b>Эпистемический статус:</b> в документированных наблюдениях изменения конфигурации часто сопровождаются изменениями состояния. Это исследуемая связь — не медицинское утверждение.",
+
+  s3_eyebrow:"02 · Конфигурация человека", s3_title:"Что такое конфигурация человека?",
+  s3_lead:"Конфигурация — это сложившаяся система структурных отношений, внутри которой работают все остальные системы: положение кранио-вертебральной оси, распределение нагрузки и цепи компенсаций, которые тело выстраивает, чтобы удерживать глаза горизонтально, а систему — вертикально.",
+  s3_l1t:"Структурная ось", s3_l1b:"Вертикальная организация головы, позвоночника и таза — референсная линия всей системы.",
+  s3_l2t:"Цепи компенсаций", s3_l2b:"Адаптивные контрсмещения, сохраняющие равновесие ценой асимметричной нагрузки.",
+  s3_l3t:"Распределение нагрузки", s3_l3b:"Как вес, напряжение и движение распределяются — или концентрируются — в структуре.",
+  s3_l4t:"Адаптивный резерв", s3_l4b:"Оставшаяся способность поглощать новую нагрузку до того, как система начнёт подавать сигналы.",
+
+  s4_eyebrow:"03 · Эксплорер симптомов", s4_title:"Симптомы как координаты.",
+  s4_lead:"Симптомы реальны — но это сигналы взаимодействующих слоёв, а не диагнозы. Эксплорер организует их как координаты: какие сигналы, на какой стороне, в каком сочетании, с какого времени. Паттерны возврата, миграции и агрегации часто говорят больше, чем любой отдельный симптом.",
+  s4_c1tag:"категория", s4_c1t:"Неврологические", s4_c1b:"Головная боль, головокружение, паттерны напряжения, сенсорный шум.",
+  s4_c2tag:"категория", s4_c2t:"Мышечно-скелетные", s4_c2b:"Шея, спина, челюсть, таз — односторонняя нагрузка и дискомфорт.",
+  s4_c3tag:"категория", s4_c3t:"Когнитивные", s4_c3b:"Фокус, скорость обработки, ментальная усталость, туман.",
+  s4_c4tag:"категория", s4_c4t:"Эмоциональные", s4_c4b:"Устойчивость, раздражительность, фоновое беспокойство.",
+  s4_c5tag:"категория", s4_c5t:"Сон", s4_c5b:"Засыпание, поддержание сна, утреннее состояние.",
+  s4_c6tag:"категория", s4_c6t:"Продуктивность", s4_c6b:"Выносливость, восстановление, точность, стабильность.",
+  s4_close:"Внутри PRIMORDIS симптом никогда не является приговором. Это координата для навигации.",
+
+  s5_eyebrow:"04 · Оценка", s5_title:"Наблюдать. Измерять. Картировать. Приоритизировать.",
+  s5_lead:"Навигация начинается с измерения. Ни одна рекомендация не делается до того, как текущая конфигурация наблюдена и описана.",
+  s5_a1tag:"шаг 1", s5_a1t:"Наблюдение", s5_a1b:"Структура в положении стоя и движение наблюдаются по заданным референсным точкам и документируются.",
+  s5_a2tag:"шаг 2", s5_a2t:"Измерение", s5_a2b:"Поза, паттерны движения и структурированное самонаблюдение превращают впечатления в сопоставимые данные.",
+  s5_a3tag:"шаг 3", s5_a3t:"Картирование", s5_a3b:"Результаты собираются в индивидуальную карту конфигурации: отклонение оси, цепи компенсаций — структурированное описание, а не диагноз.",
+  s5_a4tag:"шаг 4", s5_a4t:"Приоритизация", s5_a4b:"Карта задаёт последовательность приоритетов: с какого слоя начинать и что наблюдать после каждого шага.",
+  s5_tools:"Цифровые инструменты оценки — компьютерное зрение, структурированные опросники — в разработке.",
+  s5_note:"<b>Принцип:</b> измерение предшествует рекомендации — всегда.",
+
+  s6_eyebrow:"05 · Навигационный фреймворк", s6_title:"Навигация важнее вмешательства.",
+  s6_lead:"PRIMORDIS рассматривает изменение как навигируемый цикл, а не разовое событие. Каждое вмешательство встроено между измерением и наблюдением:",
+  s6_st1:"Оценка", s6_st2:"Картирование", s6_st3:"Приоритизация", s6_st4:"Вмешательство", s6_st5:"Наблюдение", s6_st6:"Переоценка", s6_st7:"Трекинг стабильности",
+  s6_back:"цикл повторяется, пока стабильность не задокументирована",
+
+  s7_eyebrow:"06 · Исследовательская программа", s7_title:"Исследовательская программа, а не доктрина.",
+  s7_lead:"PRIMORDIS построен как открытая исследовательская программа. Его утверждения организованы так, чтобы их можно было проверить — и, где они ошибочны, исправить.",
+  s7_r1tag:"эмпирическая база", s7_r1t:"Наблюдения", s7_r1b:"3 500+ документированных клинических наблюдений составляют эмпирическую базу: структурированные случаи с таймлайнами и катамнезом.",
+  s7_r2tag:"в исследовании", s7_r2t:"Гипотезы", s7_r2b:"Центральная гипотеза — Primordocciput — предполагает первичную точку смещения на кранио-цервикальном переходе (C0), из которой может происходить системная асимметрия. Она сформулирована как гипотеза, а не факт.",
+  s7_r3tag:"проверяемость", s7_r3t:"Критерии фальсификации", s7_r3b:"Каждое ключевое утверждение сопровождается условиями, при которых оно считалось бы ложным.",
+  s7_r4tag:"фронтир", s7_r4t:"Открытые вопросы", s7_r4b:"Механизмы, устойчивость изменений, вариативность в популяции и границы применимости остаются открытыми.",
+  s7_note:"<b>Требование конструкции:</b> наблюдения и гипотезы всегда маркируются как таковые. Научная скромность встроена в эту платформу.",
+
+  s8_eyebrow:"07 · Библиотека случаев", s8_title:"Библиотека случаев.",
+  s8_lead:"Структурированная библиотека случаев документирует конфигурации во времени. Каждый случай фиксируется по пяти измерениям — организованным для сравнения, а не для убеждения.",
+  s8_d1k:"Паттерн симптомов", s8_d1v:"Какие сигналы, на какой стороне, в каком сочетании — на старте наблюдения.",
+  s8_d2k:"Паттерн конфигурации", s8_d2v:"Структурная картина: ось, компенсации, распределение нагрузки.",
+  s8_d3k:"Таймлайн", s8_d3v:"История вмешательств и последовательность документированных наблюдений.",
+  s8_d4k:"Катамнез", s8_d4v:"Что наблюдается через недели и месяцы — без селекции.",
+  s8_d5k:"Наблюдение исхода", s8_d5v:"Что изменилось, что нет — и что остаётся открытым.",
+  s8_disc:"<b>Примечание:</b> случаи — это наблюдательные записи. Они иллюстрируют подход, но не доказывают эффективность.",
+
+  s9_eyebrow:"08 · Вопросы", s9_title:"Честные ответы на честные вопросы.",
+  s9_q1:"PRIMORDIS — это медицинский сервис?",
+  s9_a1:"Нет. PRIMORDIS — исследовательская навигационная платформа. Она не диагностирует и не лечит заболевания и не заменяет медицинскую помощь. При наличии медицинского состояния обратитесь к квалифицированному врачу.",
+  s9_q2:"Что установлено, а что — гипотеза?",
+  s9_a2:"Документированные наблюдения — структурированные записи случаев — образуют эмпирический слой. Объяснительные утверждения, включая гипотезу Primordocciput, явно маркированы как исследуемые гипотезы.",
+  s9_q3:"Что включает оценка?",
+  s9_a3:"Визуальное и постуральное наблюдение по заданным референсным точкам, паттерны движения и структурированное самонаблюдение. Результат — карта конфигурации, а не диагноз.",
+  s9_q4:"Каких результатов ожидать?",
+  s9_a4:"Никакой результат не обещается. Обязательство платформы иное: измерение до рекомендации, наблюдение после каждого шага и честная документация того, что меняется — и что нет.",
+  s9_q5:"Как PRIMORDIS связан с антропономией?",
+  s9_a5:"PRIMORDIS — один из прикладных методов в рамках формирующейся дисциплины «антропономия», изучающей цепь от структурного ограничения к функциональной доступности и реализации потенциала. Данные и методы платформы спроектированы совместимыми с этой более широкой рамкой.",
+
+  s10_eyebrow:"09 · Начало навигации", s10_title:"Начните навигацию.",
+  s10_lead:"Первый шаг — оценка: ваша конфигурация наблюдается, измеряется и картируется. Маршрут начинается с карты.",
+  s10_cta:"Запросить оценку",
+  s10_note:"Вам не будут продавать. Вас измерят, картируют — и покажут вам вашу собственную конфигурацию.",
+
+  f_line1:"PRIMORDIS — платформа навигации конфигурации человека.",
+  f_line2:"Часть формирующейся дисциплины «Антропономия».",
+  f_disc:"Образовательный и исследовательский контент. Не является медицинской рекомендацией.",
+  f_rights:"© 2026 PRIMORDIS. Наблюдения и гипотезы маркированы как таковые."
+},
+  es:{
+  nav_home:"Inicio",
+  nav_framework:"Marco",
+  nav_assessment:"Evaluación",
+  nav_research:"Investigación",
+  nav_cases:"Casos",
+  nav_faq:"Preguntas",
+  hero_eyebrow:"PRIMORDIS — plataforma de investigación",
+  hero_title:"Navegación de la <em>configuración</em> humana",
+  hero_sub:"Comprender cómo la configuración influye en el estado, el rendimiento y la realización del potencial.",
+  hero_cta1:"Comenzar navegación",
+  hero_cta2:"Explorar el marco",
+  hero_note:"No es una clínica. No es un servicio de tratamiento. Es una plataforma de navegación.",
+  hero_principle_label:"principio constitucional 01",
+  hero_principle:"La configuración precede a la percepción.",
+  ax_s1:"ESTADO",
+  ax_s1b:"lo que sientes",
+  ax_s2:"CONFIGURACIÓN",
+  ax_s2b:"lo que lo moldea",
+  ax_s3:"NAVEGACIÓN",
+  ax_s3b:"cómo se guía el cambio",
+  hero_fig:"Ilustración esquemática del marco — no es una representación anatómica.",
+  s2_eyebrow:"01 · Estado humano",
+  s2_title:"Sientes el estado — no la configuración.",
+  s2_lead:"Energía, enfoque, claridad, estabilidad emocional, sueño, resiliencia — el estado es cómo se vive realmente la vida. PRIMORDIS comienza donde tú comienzas: con el estado. Luego lo rastrea hasta las capas interactuantes de las que emerge.",
+  s2_ch1:"Energía",
+  s2_ch2:"Enfoque",
+  s2_ch3:"Claridad",
+  s2_ch4:"Estabilidad emocional",
+  s2_ch5:"Sueño",
+  s2_ch6:"Resiliencia",
+  s2_note:"<b>Estado epistémico:</b> en observaciones documentadas, los cambios en la configuración frecuentemente se acompañan de cambios en el estado. Esta es una asociación en estudio — no una afirmación médica.",
+  s3_eyebrow:"02 · Configuración humana",
+  s3_title:"¿Qué es la configuración humana?",
+  s3_lead:"La configuración es la disposición establecida de relaciones estructurales en las que opera cada uno de los otros sistemas: la posición del eje cráneo-vertebral, la distribución de carga y las cadenas de compensación que el cuerpo construye para mantener los ojos nivelados.",
+  s3_l1t:"Eje estructural",
+  s3_l1b:"La organización vertical de cabeza, columna y pelvis — la línea de referencia del sistema completo.",
+  s3_l2t:"Cadenas de compensación",
+  s3_l2b:"Desplazamientos adaptativos que preservan el equilibrio a costa de carga asimétrica.",
+  s3_l3t:"Distribución de carga",
+  s3_l3b:"Cómo el peso, la tensión y el movimiento se distribuyen — o concentran — en la estructura.",
+  s3_l4t:"Reserva adaptativa",
+  s3_l4b:"La capacidad restante para absorber nueva carga antes de que el sistema produzca señales.",
+  s4_eyebrow:"03 · Explorador de síntomas",
+  s4_title:"Síntomas como coordenadas.",
+  s4_lead:"Los síntomas son reales — pero son señales de capas interactuantes, no diagnósticos. El Explorador los organiza como coordenadas: qué señales, en qué lado, en qué combinación, desde cuándo.",
+  s4_c1tag:"categoría",
+  s4_c1t:"Neurológico",
+  s4_c1b:"Cefalea, mareo, patrones de tensión, ruido sensorial.",
+  s4_c2tag:"categoría",
+  s4_c2t:"Musculoesquelético",
+  s4_c2b:"Cuello, espalda, mandíbula, pelvis — carga y molestias unilaterales.",
+  s4_c3tag:"categoría",
+  s4_c3t:"Cognitivo",
+  s4_c3b:"Enfoque, velocidad de procesamiento, fatiga mental, niebla.",
+  s4_c4tag:"categoría",
+  s4_c4t:"Emocional",
+  s4_c4b:"Estabilidad, irritabilidad, inquietud de fondo.",
+  s4_c5tag:"categoría",
+  s4_c5t:"Sueño",
+  s4_c5b:"Conciliar el sueño, mantenerlo, estado matutino.",
+  s4_c6tag:"categoría",
+  s4_c6t:"Rendimiento",
+  s4_c6b:"Resistencia, recuperación, precisión, consistencia.",
+  s4_close:"En PRIMORDIS, un síntoma nunca es un veredicto. Es una coordenada para la navegación.",
+  s5_eyebrow:"04 · Evaluación",
+  s5_title:"Observar. Medir. Mapear. Priorizar.",
+  s5_lead:"La navegación comienza con la medición. Ninguna recomendación se hace antes de que la configuración actual haya sido observada y descrita.",
+  s5_a1tag:"paso 1",
+  s5_a1t:"Observar",
+  s5_a1b:"La estructura de pie y el movimiento se observan desde puntos de referencia definidos y se documentan.",
+  s5_a2tag:"paso 2",
+  s5_a2t:"Medir",
+  s5_a2b:"La postura, los patrones de movimiento y la auto-observación estructurada convierten impresiones en datos comparables.",
+  s5_a3tag:"paso 3",
+  s5_a3t:"Mapear",
+  s5_a3b:"Los resultados se ensamblan en un mapa de configuración individual: desviación del eje, cadenas de compensación.",
+  s5_a4tag:"paso 4",
+  s5_a4t:"Priorizar",
+  s5_a4b:"El mapa define la secuencia de prioridad: qué capa abordar primero y qué observar después de cada paso.",
+  s5_tools:"Herramientas de evaluación digital — visión artificial, cuestionarios estructurados — en desarrollo.",
+  s5_note:"<b>Principio:</b> la medición precede a la recomendación — siempre.",
+  s6_eyebrow:"05 · Marco de navegación",
+  s6_title:"La navegación es más importante que la intervención.",
+  s6_lead:"PRIMORDIS trata el cambio como un ciclo navegado, no como un evento único. Cada intervención se inserta entre medición y observación:",
+  s6_st1:"Evaluación",
+  s6_st2:"Mapeo",
+  s6_st3:"Priorización",
+  s6_st4:"Intervención",
+  s6_st5:"Observación",
+  s6_st6:"Reevaluación",
+  s6_st7:"Seguimiento de estabilidad",
+  s6_back:"el ciclo se repite hasta que la estabilidad queda documentada",
+  s7_eyebrow:"06 · Programa de investigación",
+  s7_title:"Un programa de investigación, no una doctrina.",
+  s7_lead:"PRIMORDIS está construido como un programa de investigación abierto. Sus afirmaciones están organizadas para poder ser probadas — y, donde sean erróneas, corregidas.",
+  s7_r1tag:"base empírica",
+  s7_r1t:"Observaciones",
+  s7_r1b:"Más de 3.500 observaciones clínicas documentadas forman la base empírica: casos estructurados con líneas de tiempo y seguimiento.",
+  s7_r2tag:"en estudio",
+  s7_r2t:"Hipótesis",
+  s7_r2b:"La hipótesis central — Primordocciput — propone un punto de desplazamiento primario en la unión cráneo-cervical (C0) del que podría originarse la asimetría sistémica. Se enuncia como hipótesis, no como hecho.",
+  s7_r3tag:"falsificabilidad",
+  s7_r3t:"Criterios de falsificación",
+  s7_r3b:"Cada afirmación central está emparejada con condiciones bajo las cuales se consideraría falsa.",
+  s7_r4tag:"frontera",
+  s7_r4t:"Preguntas abiertas",
+  s7_r4b:"Mecanismos, durabilidad del cambio, variabilidad poblacional y los límites del marco permanecen abiertos.",
+  s7_note:"<b>Requisito de diseño:</b> las observaciones y las hipótesis siempre se etiquetan como tales. La humildad científica está integrada en esta plataforma.",
+  s8_eyebrow:"07 · Biblioteca de casos",
+  s8_title:"La biblioteca de casos.",
+  s8_lead:"Una biblioteca de casos estructurada documenta las configuraciones a lo largo del tiempo. Cada caso se registra en cinco dimensiones — organizadas para comparación, no para persuasión.",
+  s8_d1k:"Patrón de síntomas",
+  s8_d1v:"Qué señales, en qué lado, en qué combinación — al inicio de la observación.",
+  s8_d2k:"Patrón de configuración",
+  s8_d2v:"La imagen estructural: eje, compensaciones, distribución de carga.",
+  s8_d3k:"Línea de tiempo",
+  s8_d3v:"Historia de intervenciones y la secuencia de observaciones documentadas.",
+  s8_d4k:"Seguimiento",
+  s8_d4v:"Lo que se observa semanas y meses después — sin selección.",
+  s8_d5k:"Observación de resultado",
+  s8_d5v:"Qué cambió, qué no — y qué permanece abierto.",
+  s8_disc:"<b>Nota:</b> los casos son registros observacionales. Ilustran el marco; no prueban eficacia.",
+  s9_eyebrow:"08 · Preguntas",
+  s9_title:"Respuestas honestas a preguntas justas.",
+  s9_q1:"¿Es PRIMORDIS un servicio médico?",
+  s9_a1:"No. PRIMORDIS es una plataforma de navegación orientada a la investigación. No diagnostica ni trata enfermedades, y no reemplaza la atención médica. Si tienes una condición médica, consulta a un médico cualificado.",
+  s9_q2:"¿Qué está establecido y qué es hipótesis?",
+  s9_a2:"Las observaciones documentadas — registros de casos estructurados — forman la capa empírica. Las afirmaciones explicativas, incluida la hipótesis Primordocciput, están explícitamente etiquetadas como hipótesis en estudio.",
+  s9_q3:"¿Qué implica una evaluación?",
+  s9_a3:"Observación visual y postural desde puntos de referencia definidos, patrones de movimiento y auto-observación estructurada. El resultado es un mapa de configuración, no un diagnóstico.",
+  s9_q4:"¿Qué resultados debo esperar?",
+  s9_a4:"No se promete ningún resultado. El compromiso de la plataforma es diferente: medición antes de la recomendación, observación después de cada paso y documentación honesta de lo que cambia — y de lo que no.",
+  s9_q5:"¿Cómo se relaciona PRIMORDIS con la Antroponomía?",
+  s9_a5:"PRIMORDIS es uno de los métodos aplicados dentro de la disciplina emergente de la Antroponomía, que estudia la cadena desde la restricción estructural hasta la accesibilidad funcional y la realización del potencial.",
+  s10_eyebrow:"09 · Comenzar navegación",
+  s10_title:"Comienza la navegación.",
+  s10_lead:"El primer paso es una evaluación: tu configuración se observa, mide y mapea. La ruta comienza desde el mapa.",
+  s10_cta:"Solicitar una evaluación",
+  s10_note:"No se te venderá nada. Serás medido, mapeado — y se te mostrará tu propia configuración.",
+  f_line1:"PRIMORDIS — Plataforma de Navegación de la Configuración Humana.",
+  f_line2:"Parte de la disciplina emergente de la Antroponomía.",
+  f_disc:"Contenido educativo y de investigación. No es consejo médico.",
+  f_rights:"© 2026 PRIMORDIS. Observaciones e hipótesis etiquetadas como tales."
+  },
+  fr:{
+  nav_home:"Accueil",
+  nav_framework:"Cadre",
+  nav_assessment:"Évaluation",
+  nav_research:"Recherche",
+  nav_cases:"Cas",
+  nav_faq:"Questions",
+  hero_eyebrow:"PRIMORDIS — plateforme de recherche",
+  hero_title:"Navigation de la <em>configuration</em> humaine",
+  hero_sub:"Comprendre comment la configuration influence l'état, la performance et la réalisation du potentiel.",
+  hero_cta1:"Commencer la navigation",
+  hero_cta2:"Explorer le cadre",
+  hero_note:"Pas une clinique. Pas un service de traitement. Une plateforme de navigation.",
+  hero_principle_label:"principe constitutionnel 01",
+  hero_principle:"La configuration précède la perception.",
+  ax_s1:"ÉTAT",
+  ax_s1b:"ce que vous ressentez",
+  ax_s2:"CONFIGURATION",
+  ax_s2b:"ce qui le façonne",
+  ax_s3:"NAVIGATION",
+  ax_s3b:"comment guider le changement",
+  hero_fig:"Illustration schématique du cadre — pas une représentation anatomique.",
+  s2_eyebrow:"01 · État humain",
+  s2_title:"Vous ressentez l'état — pas la configuration.",
+  s2_lead:"Énergie, concentration, clarté, stabilité émotionnelle, sommeil, résilience — l'état est la façon dont la vie est réellement vécue. PRIMORDIS commence là où vous commencez : par l'état, puis le retrace jusqu'aux couches interactives dont il émerge.",
+  s2_ch1:"Énergie",
+  s2_ch2:"Concentration",
+  s2_ch3:"Clarté",
+  s2_ch4:"Stabilité émotionnelle",
+  s2_ch5:"Sommeil",
+  s2_ch6:"Résilience",
+  s2_note:"<b>Statut épistémique :</b> dans les observations documentées, les changements de configuration s'accompagnent fréquemment de changements d'état. C'est une association à l'étude — pas une affirmation médicale.",
+  s3_eyebrow:"02 · Configuration humaine",
+  s3_title:"Qu'est-ce que la configuration humaine ?",
+  s3_lead:"La configuration est la disposition établie des relations structurelles dans lesquelles opèrent tous les autres systèmes : la position de l'axe cranio-vertébral, la distribution des charges et les chaînes de compensation que le corps construit.",
+  s3_l1t:"Axe structurel",
+  s3_l1b:"L'organisation verticale de la tête, de la colonne vertébrale et du bassin — la ligne de référence du système entier.",
+  s3_l2t:"Chaînes de compensation",
+  s3_l2b:"Des contre-déplacements adaptatifs qui préservent l'équilibre au prix d'une charge asymétrique.",
+  s3_l3t:"Distribution des charges",
+  s3_l3b:"Comment le poids, la tension et le mouvement sont partagés — ou concentrés — dans la structure.",
+  s3_l4t:"Réserve adaptative",
+  s3_l4b:"La capacité restante à absorber de nouvelles charges avant que le système produise des signaux.",
+  s4_eyebrow:"03 · Explorateur de symptômes",
+  s4_title:"Les symptômes comme coordonnées.",
+  s4_lead:"Les symptômes sont réels — mais ce sont des signaux de couches interactives, pas des diagnostics. L'Explorateur les organise comme des coordonnées : quels signaux, de quel côté, dans quelle combinaison, depuis quand.",
+  s4_c1tag:"catégorie",
+  s4_c1t:"Neurologique",
+  s4_c1b:"Maux de tête, vertiges, patterns de tension, bruit sensoriel.",
+  s4_c2tag:"catégorie",
+  s4_c2t:"Musculo-squelettique",
+  s4_c2b:"Cou, dos, mâchoire, bassin — charge et inconfort unilatéraux.",
+  s4_c3tag:"catégorie",
+  s4_c3t:"Cognitif",
+  s4_c3b:"Concentration, vitesse de traitement, fatigue mentale, brouillard.",
+  s4_c4tag:"catégorie",
+  s4_c4t:"Émotionnel",
+  s4_c4b:"Stabilité, irritabilité, agitation de fond.",
+  s4_c5tag:"catégorie",
+  s4_c5t:"Sommeil",
+  s4_c5b:"Endormissement, maintien du sommeil, état matinal.",
+  s4_c6tag:"catégorie",
+  s4_c6t:"Performance",
+  s4_c6b:"Endurance, récupération, précision, constance.",
+  s4_close:"Chez PRIMORDIS, un symptôme n'est jamais un verdict. C'est une coordonnée pour la navigation.",
+  s5_eyebrow:"04 · Évaluation",
+  s5_title:"Observer. Mesurer. Cartographier. Prioriser.",
+  s5_lead:"La navigation commence par la mesure. Aucune recommandation n'est faite avant que la configuration actuelle ait été observée et décrite.",
+  s5_a1tag:"étape 1",
+  s5_a1t:"Observer",
+  s5_a1b:"La structure debout et le mouvement sont observés depuis des points de référence définis et documentés.",
+  s5_a2tag:"étape 2",
+  s5_a2t:"Mesurer",
+  s5_a2b:"La posture, les patterns de mouvement et l'auto-observation structurée transforment les impressions en données comparables.",
+  s5_a3tag:"étape 3",
+  s5_a3t:"Cartographier",
+  s5_a3b:"Les résultats sont assemblés en une carte de configuration individuelle : déviation de l'axe, chaînes de compensation.",
+  s5_a4tag:"étape 4",
+  s5_a4t:"Prioriser",
+  s5_a4b:"La carte définit la séquence de priorité : quelle couche adresser en premier et quoi observer après chaque étape.",
+  s5_tools:"Outils d'évaluation numérique — vision par ordinateur, questionnaires structurés — en développement.",
+  s5_note:"<b>Principe :</b> la mesure précède la recommandation — toujours.",
+  s6_eyebrow:"05 · Cadre de navigation",
+  s6_title:"La navigation est plus importante que l'intervention.",
+  s6_lead:"PRIMORDIS traite le changement comme un cycle navigué, pas comme un événement unique. Chaque intervention s'insère entre mesure et observation :",
+  s6_st1:"Évaluation",
+  s6_st2:"Cartographie",
+  s6_st3:"Priorisation",
+  s6_st4:"Intervention",
+  s6_st5:"Observation",
+  s6_st6:"Réévaluation",
+  s6_st7:"Suivi de stabilité",
+  s6_back:"le cycle se répète jusqu'à ce que la stabilité soit documentée",
+  s7_eyebrow:"06 · Programme de recherche",
+  s7_title:"Un programme de recherche, pas une doctrine.",
+  s7_lead:"PRIMORDIS est construit comme un programme de recherche ouvert. Ses affirmations sont organisées pour pouvoir être testées — et, là où elles sont erronées, corrigées.",
+  s7_r1tag:"base empirique",
+  s7_r1t:"Observations",
+  s7_r1b:"Plus de 3 500 observations cliniques documentées forment la base empirique : cas structurés avec chronologies et suivi.",
+  s7_r2tag:"en étude",
+  s7_r2t:"Hypothèses",
+  s7_r2b:"L'hypothèse centrale — Primordocciput — propose un point de déplacement primaire à la jonction cranio-cervicale (C0) d'où pourrait provenir l'asymétrie systémique. Elle est énoncée comme hypothèse, pas comme fait.",
+  s7_r3tag:"testabilité",
+  s7_r3t:"Critères de falsification",
+  s7_r3b:"Chaque affirmation centrale est associée à des conditions dans lesquelles elle serait considérée comme fausse.",
+  s7_r4tag:"frontière",
+  s7_r4t:"Questions ouvertes",
+  s7_r4b:"Mécanismes, durabilité du changement, variabilité de la population et les limites du cadre restent ouverts.",
+  s7_note:"<b>Exigence de conception :</b> les observations et les hypothèses sont toujours étiquetées comme telles. L'humilité scientifique est intégrée dans cette plateforme.",
+  s8_eyebrow:"07 · Bibliothèque de cas",
+  s8_title:"La bibliothèque de cas.",
+  s8_lead:"Une bibliothèque de cas structurée documente les configurations dans le temps. Chaque cas est enregistré selon cinq dimensions — organisées pour la comparaison, pas la persuasion.",
+  s8_d1k:"Pattern de symptômes",
+  s8_d1v:"Quels signaux, de quel côté, dans quelle combinaison — au début de l'observation.",
+  s8_d2k:"Pattern de configuration",
+  s8_d2v:"L'image structurelle : axe, compensations, distribution des charges.",
+  s8_d3k:"Chronologie",
+  s8_d3v:"Historique des interventions et séquence des observations documentées.",
+  s8_d4k:"Suivi",
+  s8_d4v:"Ce qui est observé des semaines et des mois plus tard — sans sélection.",
+  s8_d5k:"Observation de résultat",
+  s8_d5v:"Ce qui a changé, ce qui n'a pas changé — et ce qui reste ouvert.",
+  s8_disc:"<b>Note :</b> les cas sont des enregistrements observationnels. Ils illustrent le cadre ; ils ne prouvent pas l'efficacité.",
+  s9_eyebrow:"08 · Questions",
+  s9_title:"Des réponses honnêtes à des questions justes.",
+  s9_q1:"PRIMORDIS est-il un service médical ?",
+  s9_a1:"Non. PRIMORDIS est une plateforme de navigation axée sur la recherche. Elle ne diagnostique pas, ne traite pas les maladies et ne remplace pas les soins médicaux. Si vous avez une condition médicale, consultez un médecin qualifié.",
+  s9_q2:"Qu'est-ce qui est établi et qu'est-ce qui est hypothèse ?",
+  s9_a2:"Les observations documentées — enregistrements de cas structurés — forment la couche empirique. Les affirmations explicatives, y compris l'hypothèse Primordocciput, sont explicitement étiquetées comme hypothèses à l'étude.",
+  s9_q3:"Que comprend une évaluation ?",
+  s9_a3:"Observation visuelle et posturale depuis des points de référence définis, patterns de mouvement et auto-observation structurée. Le résultat est une carte de configuration, pas un diagnostic.",
+  s9_q4:"Quels résultats puis-je attendre ?",
+  s9_a4:"Aucun résultat n'est promis. L'engagement de la plateforme est différent : mesure avant recommandation, observation après chaque étape et documentation honnête de ce qui change — et de ce qui ne change pas.",
+  s9_q5:"Comment PRIMORDIS se rapporte-t-il à l'Anthroponomie ?",
+  s9_a5:"PRIMORDIS est une méthode appliquée au sein de la discipline émergente de l'Anthroponomie, qui étudie la chaîne de la contrainte structurelle à l'accessibilité fonctionnelle jusqu'à la réalisation du potentiel.",
+  s10_eyebrow:"09 · Commencer la navigation",
+  s10_title:"Commencez la navigation.",
+  s10_lead:"La première étape est une évaluation : votre configuration est observée, mesurée et cartographiée. La route commence depuis la carte.",
+  s10_cta:"Demander une évaluation",
+  s10_note:"On ne vous vendra rien. Vous serez mesuré, cartographié — et votre propre configuration vous sera montrée.",
+  f_line1:"PRIMORDIS — Plateforme de Navigation de la Configuration Humaine.",
+  f_line2:"Partie de la discipline émergente de l'Anthroponomie.",
+  f_disc:"Contenu éducatif et de recherche. Pas un conseil médical.",
+  f_rights:"© 2026 PRIMORDIS. Observations et hypothèses étiquetées comme telles."
+  },
+  ar:{
+  nav_home:"الرئيسية",
+  nav_framework:"الإطار",
+  nav_assessment:"التقييم",
+  nav_research:"البحث",
+  nav_cases:"الحالات",
+  nav_faq:"الأسئلة",
+  hero_eyebrow:"PRIMORDIS — منصة بحثية",
+  hero_title:"التنقل في <em>التهيؤ</em> البشري",
+  hero_sub:"فهم كيف يؤثر التهيؤ الهيكلي على الحالة والأداء وتحقيق الإمكانات.",
+  hero_cta1:"بدء التنقل",
+  hero_cta2:"استكشاف الإطار",
+  hero_note:"ليست عيادة. ليست خدمة علاج. منصة للتنقل.",
+  hero_principle_label:"المبدأ الدستوري 01",
+  hero_principle:"التهيؤ يسبق الإدراك.",
+  ax_s1:"الحالة",
+  ax_s1b:"ما تشعر به",
+  ax_s2:"التهيؤ",
+  ax_s2b:"ما يُشكّله",
+  ax_s3:"التنقل",
+  ax_s3b:"كيف يُوجَّه التغيير",
+  hero_fig:"رسم توضيحي للإطار — وليس تصويراً تشريحياً.",
+  s2_eyebrow:"01 · الحالة البشرية",
+  s2_title:"أنت تشعر بالحالة — لا بالتهيؤ.",
+  s2_lead:"الطاقة، التركيز، الوضوح، الاستقرار العاطفي، النوم، الصمود — الحالة هي الطريقة التي تُعاش بها الحياة فعلياً. تبدأ PRIMORDIS من حيث تبدأ أنت: بالحالة، ثم تتتبعها إلى الطبقات المتفاعلة التي تنبثق منها.",
+  s2_ch1:"الطاقة",
+  s2_ch2:"التركيز",
+  s2_ch3:"الوضوح",
+  s2_ch4:"الاستقرار العاطفي",
+  s2_ch5:"النوم",
+  s2_ch6:"الصمود",
+  s2_note:"<b>الحالة المعرفية:</b> في الملاحظات الموثقة، كثيراً ما تقترن التغييرات في التهيؤ بتغييرات في الحالة. هذه رابطة قيد الدراسة — وليست ادعاءً طبياً.",
+  s3_eyebrow:"02 · التهيؤ البشري",
+  s3_title:"ما هو التهيؤ البشري؟",
+  s3_lead:"التهيؤ هو الترتيب القائم للعلاقات الهيكلية التي تعمل ضمنها كل الأنظمة الأخرى: موضع المحور القحفي-الفقري، توزيع الحِمل، وسلاسل التعويض التي يبني الجسم.",
+  s3_l1t:"المحور الهيكلي",
+  s3_l1b:"التنظيم الرأسي للرأس والعمود الفقري والحوض — خط المرجع للنظام بأكمله.",
+  s3_l2t:"سلاسل التعويض",
+  s3_l2b:"إزاحات تكيفية مضادة تحافظ على التوازن على حساب حِمل غير متناسق.",
+  s3_l3t:"توزيع الحِمل",
+  s3_l3b:"كيف يتوزع الوزن والشد والحركة — أو يتركز — عبر الهيكل.",
+  s3_l4t:"الاحتياطي التكيفي",
+  s3_l4b:"القدرة المتبقية على استيعاب حِمل جديد قبل أن يُنتج النظام إشارات.",
+  s4_eyebrow:"03 · مستكشف الأعراض",
+  s4_title:"الأعراض كإحداثيات.",
+  s4_lead:"الأعراض حقيقية — لكنها إشارات من طبقات متفاعلة، وليست تشخيصات. يُنظّمها المستكشف كإحداثيات: أي إشارات، في أي جانب، في أي تركيبة، ومنذ متى.",
+  s4_c1tag:"فئة",
+  s4_c1t:"عصبية",
+  s4_c1b:"صداع، دوار، أنماط توتر، ضوضاء حسية.",
+  s4_c2tag:"فئة",
+  s4_c2t:"عضلية هيكلية",
+  s4_c2b:"رقبة، ظهر، فك، حوض — حِمل وانزعاج أحادي الجانب.",
+  s4_c3tag:"فئة",
+  s4_c3t:"إدراكية",
+  s4_c3b:"تركيز، سرعة معالجة، إرهاق ذهني، ضباب.",
+  s4_c4tag:"فئة",
+  s4_c4t:"عاطفية",
+  s4_c4b:"ثبات، تهيج، قلق خفي.",
+  s4_c5tag:"فئة",
+  s4_c5t:"نوم",
+  s4_c5b:"الخلود إلى النوم، الاستمرار فيه، الحالة الصباحية.",
+  s4_c6tag:"فئة",
+  s4_c6t:"أداء",
+  s4_c6b:"تحمّل، تعافٍ، دقة، ثبات.",
+  s4_close:"في PRIMORDIS، الأعراض ليست أحكاماً. إنها إحداثيات للتنقل.",
+  s5_eyebrow:"04 · التقييم",
+  s5_title:"لاحظ. قِس. ارسم. رتّب.",
+  s5_lead:"التنقل يبدأ بالقياس. لا تُقدَّم أي توصية قبل أن يُلاحَظ التهيؤ الحالي ويُوصَف.",
+  s5_a1tag:"الخطوة 1",
+  s5_a1t:"الملاحظة",
+  s5_a1b:"يُلاحَظ الهيكل وقوفاً والحركة من نقاط مرجعية محددة ويُوثَّق.",
+  s5_a2tag:"الخطوة 2",
+  s5_a2t:"القياس",
+  s5_a2b:"الوضعية وأنماط الحركة والملاحظة الذاتية المنظمة تحوّل الانطباعات إلى بيانات قابلة للمقارنة.",
+  s5_a3tag:"الخطوة 3",
+  s5_a3t:"الرسم",
+  s5_a3b:"تُجمَع النتائج في خريطة تهيؤ فردية: انحراف المحور، سلاسل التعويض.",
+  s5_a4tag:"الخطوة 4",
+  s5_a4t:"الترتيب",
+  s5_a4b:"تُحدد الخريطة تسلسل الأولويات: أي طبقة تُعالَج أولاً، وما الذي يُلاحَظ بعد كل خطوة.",
+  s5_tools:"أدوات تقييم رقمية — رؤية حاسوبية، استبيانات منظمة — قيد التطوير.",
+  s5_note:"<b>المبدأ:</b> القياس يسبق التوصية — دائماً.",
+  s6_eyebrow:"05 · إطار التنقل",
+  s6_title:"التنقل أهم من التدخل.",
+  s6_lead:"تتعامل PRIMORDIS مع التغيير باعتباره دورة ملاحية لا حدثاً واحداً. كل تدخل مُدرَج بين القياس والملاحظة:",
+  s6_st1:"تقييم",
+  s6_st2:"رسم خريطة",
+  s6_st3:"تحديد أولويات",
+  s6_st4:"تدخل",
+  s6_st5:"ملاحظة",
+  s6_st6:"إعادة تقييم",
+  s6_st7:"تتبع الاستقرار",
+  s6_back:"تتكرر الدورة حتى يُوثَّق الاستقرار",
+  s7_eyebrow:"06 · برنامج البحث",
+  s7_title:"برنامج بحث لا عقيدة.",
+  s7_lead:"بُنيت PRIMORDIS بوصفها برنامجاً بحثياً مفتوحاً. ادعاءاتها منظَّمة لتكون قابلة للاختبار — وتصحيحها حين تكون خاطئة.",
+  s7_r1tag:"القاعدة التجريبية",
+  s7_r1t:"الملاحظات",
+  s7_r1b:"أكثر من 3500 ملاحظة سريرية موثقة تُشكّل القاعدة التجريبية: حالات منظمة مع جداول زمنية ومتابعة.",
+  s7_r2tag:"قيد الدراسة",
+  s7_r2t:"الفرضيات",
+  s7_r2b:"الفرضية المحورية — Primordocciput — تقترح نقطة إزاحة أولية عند التقاطع القحفي-الرقبي (C0) قد تنشأ منها الاتساءلة الهيكلية. تُصاغ كفرضية لا كحقيقة.",
+  s7_r3tag:"قابلية الاختبار",
+  s7_r3t:"معايير الدحض",
+  s7_r3b:"كل ادعاء محوري مقترن بشروط تُعدّ عندها خاطئة.",
+  s7_r4tag:"الحدود",
+  s7_r4t:"أسئلة مفتوحة",
+  s7_r4b:"الآليات ومتانة التغيير والتباين السكاني وحدود الإطار تظل مفتوحة.",
+  s7_note:"<b>متطلب التصميم:</b> الملاحظات والفرضيات تُوسَم دائماً بوصفها كذلك. التواضع العلمي مدمج في هذه المنصة.",
+  s8_eyebrow:"07 · مكتبة الحالات",
+  s8_title:"مكتبة الحالات.",
+  s8_lead:"تُوثّق مكتبة حالات منظمة التهيؤات عبر الزمن. كل حالة مُسجَّلة على خمسة أبعاد — منظّمة للمقارنة لا للإقناع.",
+  s8_d1k:"نمط الأعراض",
+  s8_d1v:"أي إشارات، في أي جانب، في أي تركيبة — في بداية الملاحظة.",
+  s8_d2k:"نمط التهيؤ",
+  s8_d2v:"الصورة الهيكلية: المحور، التعويضات، توزيع الحِمل.",
+  s8_d3k:"الجدول الزمني",
+  s8_d3v:"تاريخ التدخلات وتسلسل الملاحظات الموثقة.",
+  s8_d4k:"المتابعة",
+  s8_d4v:"ما يُلاحَظ بعد أسابيع وأشهر — دون انتقاء.",
+  s8_d5k:"ملاحظة النتيجة",
+  s8_d5v:"ما تغيّر، وما لم يتغير — وما ظل مفتوحاً.",
+  s8_disc:"<b>ملاحظة:</b> الحالات سجلات رصدية. تُوضّح الإطار؛ لا تُثبت الفعالية.",
+  s9_eyebrow:"08 · الأسئلة",
+  s9_title:"إجابات صادقة على أسئلة منصفة.",
+  s9_q1:"هل PRIMORDIS خدمة طبية؟",
+  s9_a1:"لا. PRIMORDIS منصة تنقل قائمة على البحث. لا تُشخّص الأمراض ولا تعالجها، ولا تحل محل الرعاية الطبية. إن كانت لديك حالة طبية، استشر طبيباً مؤهلاً.",
+  s9_q2:"ما الثابت وما الفرضية؟",
+  s9_a2:"الملاحظات الموثقة — سجلات الحالات المنظمة — تُشكّل الطبقة التجريبية. الادعاءات التفسيرية، بما فيها فرضية Primordocciput، مُوسَمة صراحةً كفرضيات قيد الدراسة.",
+  s9_q3:"ما الذي يتضمنه التقييم؟",
+  s9_a3:"ملاحظة بصرية ووضعية من نقاط مرجعية محددة، أنماط حركة، وملاحظة ذاتية منظمة. الناتج خريطة تهيؤ لا تشخيص.",
+  s9_q4:"ما النتائج التي يجب أن أتوقعها؟",
+  s9_a4:"لا يُوعَد بأي نتيجة. التزام المنصة مختلف: قياس قبل التوصية، ملاحظة بعد كل خطوة، وتوثيق صادق لما يتغير — وما لا يتغير.",
+  s9_q5:"كيف ترتبط PRIMORDIS بالأنثروبونومي؟",
+  s9_a5:"PRIMORDIS إحدى المنهجيات التطبيقية ضمن تخصص الأنثروبونومي الناشئ، الذي يدرس السلسلة من القيد الهيكلي إلى إمكانية الوصول الوظيفي وصولاً إلى تحقيق الإمكانات.",
+  s10_eyebrow:"09 · بدء التنقل",
+  s10_title:"ابدأ التنقل.",
+  s10_lead:"الخطوة الأولى هي التقييم: يُلاحَظ تهيؤك ويُقاس ويُرسَم على خريطة. الطريق يبدأ من الخريطة.",
+  s10_cta:"طلب تقييم",
+  s10_note:"لن يُباع لك شيء. ستُقاس، ستُرسَم خريطتك — وستُعرَض عليك تهيؤك الخاص.",
+  f_line1:"PRIMORDIS — منصة التنقل في التهيؤ البشري.",
+  f_line2:"جزء من تخصص الأنثروبونومي الناشئ.",
+  f_disc:"محتوى تعليمي وبحثي. ليس نصيحة طبية.",
+  f_rights:"© 2026 PRIMORDIS. الملاحظات والفرضيات مُوسَمة بوصفها كذلك."
+  },
+  zh:{
+  nav_home:"首页",
+  nav_framework:"框架",
+  nav_assessment:"评估",
+  nav_research:"研究",
+  nav_cases:"案例",
+  nav_faq:"问答",
+  hero_eyebrow:"PRIMORDIS — 研究驱动平台",
+  hero_title:"人体构型<em>导航</em>",
+  hero_sub:"理解构型如何影响状态、表现与潜能的实现。",
+  hero_cta1:"开始导航",
+  hero_cta2:"探索框架",
+  hero_note:"非诊所。非治疗服务。导航平台。",
+  hero_principle_label:"宪章原则 01",
+  hero_principle:"构型先于感知。",
+  ax_s1:"状态",
+  ax_s1b:"您所感受到的",
+  ax_s2:"构型",
+  ax_s2b:"塑造状态之物",
+  ax_s3:"导航",
+  ax_s3b:"如何引导改变",
+  hero_fig:"框架示意图 — 非解剖学图示。",
+  s2_eyebrow:"01 · 人体状态",
+  s2_title:"您感受到的是状态——而非构型。",
+  s2_lead:"精力、专注、清晰、情绪稳定、睡眠、韧性——状态是生命真实体验的方式。PRIMORDIS从您出发的地方开始：状态。然后向下追溯至产生状态的各层互动系统。",
+  s2_ch1:"精力",
+  s2_ch2:"专注",
+  s2_ch3:"清晰",
+  s2_ch4:"情绪稳定",
+  s2_ch5:"睡眠",
+  s2_ch6:"韧性",
+  s2_note:"<b>认识论状态：</b>在有记录的观察中，构型的变化常伴随状态的变化。这是一个正在研究中的关联——而非医学声明。",
+  s3_eyebrow:"02 · 人体构型",
+  s3_title:"什么是人体构型？",
+  s3_lead:"构型是所有其他系统在其中运作的结构关系的既有排列：颅脊轴的位置、负荷分布，以及身体为维持眼睛水平和系统直立而建立的代偿链。",
+  s3_l1t:"结构轴",
+  s3_l1b:"头部、脊椎和骨盆的垂直组织——整个系统的参考线。",
+  s3_l2t:"代偿链",
+  s3_l2b:"以不对称负荷为代价维持平衡的适应性反向移位。",
+  s3_l3t:"负荷分布",
+  s3_l3b:"重量、张力和运动如何在结构中分散——或集中。",
+  s3_l4t:"适应储备",
+  s3_l4b:"系统产生信号前能够吸收新负荷的剩余能力。",
+  s4_eyebrow:"03 · 症状探索器",
+  s4_title:"症状作为坐标。",
+  s4_lead:"症状是真实的——但它们是各互动层的信号，而非诊断。探索器将其组织为坐标：哪些信号、在哪一侧、以何种组合、自何时起。",
+  s4_c1tag:"类别",
+  s4_c1t:"神经系统",
+  s4_c1b:"头痛、眩晕、紧张模式、感觉噪声。",
+  s4_c2tag:"类别",
+  s4_c2t:"肌肉骨骼",
+  s4_c2b:"颈部、背部、颌部、骨盆——单侧负荷与不适。",
+  s4_c3tag:"类别",
+  s4_c3t:"认知",
+  s4_c3b:"专注力、处理速度、脑力疲劳、思维混沌。",
+  s4_c4tag:"类别",
+  s4_c4t:"情绪",
+  s4_c4b:"稳定性、易怒、潜在不安。",
+  s4_c5tag:"类别",
+  s4_c5t:"睡眠",
+  s4_c5b:"入睡、维持睡眠、晨起状态。",
+  s4_c6tag:"类别",
+  s4_c6t:"表现",
+  s4_c6b:"耐力、恢复、精准度、一致性。",
+  s4_close:"在PRIMORDIS中，症状从不是判决。它是导航的坐标。",
+  s5_eyebrow:"04 · 评估",
+  s5_title:"观察。测量。绘图。优先排序。",
+  s5_lead:"导航从测量开始。在当前构型被观察和描述之前，不提出任何建议。",
+  s5_a1tag:"步骤1",
+  s5_a1t:"观察",
+  s5_a1b:"从定义的参考点观察并记录站立结构和运动。",
+  s5_a2tag:"步骤2",
+  s5_a2t:"测量",
+  s5_a2b:"姿势、运动模式和结构化自我观察将印象转化为可比较的数据。",
+  s5_a3tag:"步骤3",
+  s5_a3t:"绘图",
+  s5_a3b:"将结果整合为个人构型图：轴偏差、代偿链——结构化描述，非诊断。",
+  s5_a4tag:"步骤4",
+  s5_a4t:"优先排序",
+  s5_a4b:"构型图定义优先顺序：首先处理哪一层，以及每步后观察什么。",
+  s5_tools:"数字评估工具——计算机视觉、结构化问卷——开发中。",
+  s5_note:"<b>原则：</b>测量先于建议——始终如此。",
+  s6_eyebrow:"05 · 导航框架",
+  s6_title:"导航比干预更重要。",
+  s6_lead:"PRIMORDIS将变化视为导航循环，而非单一事件。每次干预都嵌入测量与观察之间：",
+  s6_st1:"评估",
+  s6_st2:"绘图",
+  s6_st3:"优先排序",
+  s6_st4:"干预",
+  s6_st5:"观察",
+  s6_st6:"重新评估",
+  s6_st7:"稳定性追踪",
+  s6_back:"循环重复直至稳定性得到记录",
+  s7_eyebrow:"06 · 研究项目",
+  s7_title:"研究项目，非教条。",
+  s7_lead:"PRIMORDIS作为开放研究项目构建。其声明经过组织以便可被检验——并在错误时得到纠正。",
+  s7_r1tag:"实证基础",
+  s7_r1t:"观察",
+  s7_r1b:"3,500余份有记录的临床观察构成实证基础：带有时间线和随访的结构化案例。",
+  s7_r2tag:"研究中",
+  s7_r2t:"假说",
+  s7_r2b:"核心假说——Primordocciput——提出在颅颈交界(C0)处存在一个原发性移位点，系统性不对称可能由此产生。以假说而非事实表述。",
+  s7_r3tag:"可检验性",
+  s7_r3t:"证伪标准",
+  s7_r3b:"每个核心声明都与被认为虚假的条件配对。",
+  s7_r4tag:"前沿",
+  s7_r4t:"开放问题",
+  s7_r4b:"机制、变化持久性、人群变异性以及框架边界仍处于开放状态。",
+  s7_note:"<b>设计要求：</b>观察和假说始终被标注为此类。科学谦逊内置于本平台。",
+  s8_eyebrow:"07 · 案例库",
+  s8_title:"案例库。",
+  s8_lead:"结构化案例库随时间记录构型。每个案例沿五个维度记录——为比较而组织，非为说服。",
+  s8_d1k:"症状模式",
+  s8_d1v:"哪些信号、在哪一侧、以何种组合——在观察开始时。",
+  s8_d2k:"构型模式",
+  s8_d2v:"结构图像：轴、代偿、负荷分布。",
+  s8_d3k:"时间线",
+  s8_d3v:"干预历史和有记录观察的顺序。",
+  s8_d4k:"随访",
+  s8_d4v:"数周和数月后观察到的情况——不加筛选。",
+  s8_d5k:"结果观察",
+  s8_d5v:"什么改变了，什么没有改变——以及什么仍处于开放状态。",
+  s8_disc:"<b>注意：</b>案例是观察性记录。它们阐明框架；并不证明疗效。",
+  s9_eyebrow:"08 · 问答",
+  s9_title:"对公正问题的诚实回答。",
+  s9_q1:"PRIMORDIS是医疗服务吗？",
+  s9_a1:"不是。PRIMORDIS是研究驱动的导航平台。它不诊断或治疗疾病，也不替代医疗保健。如有医疗状况，请咨询合格医生。",
+  s9_q2:"什么是已确立的，什么是假说？",
+  s9_a2:"有记录的观察——结构化案例记录——构成实证层。解释性声明，包括Primordocciput假说，明确标注为研究中的假说。",
+  s9_q3:"评估涉及什么？",
+  s9_a3:"从定义参考点进行视觉和姿势观察、运动模式和结构化自我观察。输出是构型图，非诊断。",
+  s9_q4:"我应该期待什么结果？",
+  s9_a4:"不承诺任何结果。平台的承诺不同：建议前测量，每步后观察，以及诚实记录什么改变——什么没有改变。",
+  s9_q5:"PRIMORDIS与人类学有何关联？",
+  s9_a5:"PRIMORDIS是新兴学科Anthroponomy中的一种应用方法，该学科研究从结构约束到功能可及性再到潜能实现的链条。",
+  s10_eyebrow:"09 · 开始导航",
+  s10_title:"开始导航。",
+  s10_lead:"第一步是评估：观察、测量并绘制您的构型图。路线从图开始。",
+  s10_cta:"申请评估",
+  s10_note:"不会向您推销任何东西。您将被测量、绘图——并展示您自己的构型。",
+  f_line1:"PRIMORDIS — 人体构型导航平台。",
+  f_line2:"新兴学科Anthroponomy的组成部分。",
+  f_disc:"教育和研究内容。非医疗建议。",
+  f_rights:"© 2026 PRIMORDIS. 观察和假说已标注为此类。"
+  },
+  ja:{
+  nav_home:"ホーム",
+  nav_framework:"フレームワーク",
+  nav_assessment:"評価",
+  nav_research:"研究",
+  nav_cases:"ケース",
+  nav_faq:"よくある質問",
+  hero_eyebrow:"PRIMORDIS — 研究主導プラットフォーム",
+  hero_title:"人体コンフィギュレーション<em>ナビゲーション</em>",
+  hero_sub:"コンフィギュレーションが状態、パフォーマンス、潜在能力の実現にどう影響するかを理解する。",
+  hero_cta1:"ナビゲーション開始",
+  hero_cta2:"フレームワークを探索",
+  hero_note:"クリニックではありません。治療サービスでもありません。ナビゲーションプラットフォームです。",
+  hero_principle_label:"憲法原則 01",
+  hero_principle:"コンフィギュレーションは知覚に先行する。",
+  ax_s1:"状態",
+  ax_s1b:"あなたが感じること",
+  ax_s2:"コンフィギュレーション",
+  ax_s2b:"それを形作るもの",
+  ax_s3:"ナビゲーション",
+  ax_s3b:"変化を導く方法",
+  hero_fig:"フレームワークの模式図 — 解剖学的図示ではありません。",
+  s2_eyebrow:"01 · 人体状態",
+  s2_title:"感じるのは状態であって、コンフィギュレーションではない。",
+  s2_lead:"エネルギー、集中力、明晰さ、感情の安定、睡眠、回復力——状態とは生活が実際に経験される方法です。PRIMORDISはあなたが始まる場所から始まります：状態から。そして状態が生まれる相互作用する層へと遡ります。",
+  s2_ch1:"エネルギー",
+  s2_ch2:"集中力",
+  s2_ch3:"明晰さ",
+  s2_ch4:"感情の安定",
+  s2_ch5:"睡眠",
+  s2_ch6:"回復力",
+  s2_note:"<b>認識論的ステータス：</b>記録された観察では、コンフィギュレーションの変化は頻繁に状態の変化を伴います。これは研究中の関連性であり、医学的主張ではありません。",
+  s3_eyebrow:"02 · 人体コンフィギュレーション",
+  s3_title:"人体コンフィギュレーションとは何か？",
+  s3_lead:"コンフィギュレーションとは、他のすべてのシステムが機能する構造的関係の現状の配置です：頭蓋脊椎軸の位置、荷重分布、そして身体が目を水平に保ち直立を維持するために構築する代償連鎖。",
+  s3_l1t:"構造軸",
+  s3_l1b:"頭部、脊椎、骨盤の垂直組織——全システムの基準線。",
+  s3_l2t:"代償連鎖",
+  s3_l2b:"非対称な荷重を代償に平衡を保つ適応的な逆移動。",
+  s3_l3t:"荷重分布",
+  s3_l3b:"体重、張力、運動が構造全体でどのように分散または集中するか。",
+  s3_l4t:"適応的余力",
+  s3_l4b:"システムがシグナルを生成する前に新しい荷重を吸収できる残りの能力。",
+  s4_eyebrow:"03 · 症状エクスプローラー",
+  s4_title:"座標としての症状。",
+  s4_lead:"症状は現実のものですが、相互作用する層からのシグナルであり、診断ではありません。エクスプローラーはそれらを座標として整理します：どのシグナルが、どちら側で、どの組み合わせで、いつから。",
+  s4_c1tag:"カテゴリ",
+  s4_c1t:"神経学的",
+  s4_c1b:"頭痛、めまい、緊張パターン、感覚ノイズ。",
+  s4_c2tag:"カテゴリ",
+  s4_c2t:"筋骨格",
+  s4_c2b:"首、背中、顎、骨盤——片側の荷重と不快感。",
+  s4_c3tag:"カテゴリ",
+  s4_c3t:"認知",
+  s4_c3b:"集中力、処理速度、精神的疲労、霧がかかった感覚。",
+  s4_c4tag:"カテゴリ",
+  s4_c4t:"感情",
+  s4_c4b:"安定性、過敏性、背景の落ち着きのなさ。",
+  s4_c5tag:"カテゴリ",
+  s4_c5t:"睡眠",
+  s4_c5b:"寝つき、眠り続けること、朝の状態。",
+  s4_c6tag:"カテゴリ",
+  s4_c6t:"パフォーマンス",
+  s4_c6b:"持久力、回復、精度、一貫性。",
+  s4_close:"PRIMORDISでは、症状は決して判決ではありません。ナビゲーションのための座標です。",
+  s5_eyebrow:"04 · 評価",
+  s5_title:"観察。測定。マッピング。優先順位付け。",
+  s5_lead:"ナビゲーションは測定から始まります。現在のコンフィギュレーションが観察・記述される前に推奨事項は出されません。",
+  s5_a1tag:"ステップ1",
+  s5_a1t:"観察",
+  s5_a1b:"定義された参照点から立位構造と動作を観察・記録します。",
+  s5_a2tag:"ステップ2",
+  s5_a2t:"測定",
+  s5_a2b:"姿勢、動作パターン、構造化した自己観察が印象を比較可能なデータに変換します。",
+  s5_a3tag:"ステップ3",
+  s5_a3t:"マッピング",
+  s5_a3b:"結果を個人のコンフィギュレーションマップにまとめます：軸の偏差、代償連鎖——診断ではなく構造化された記述。",
+  s5_a4tag:"ステップ4",
+  s5_a4t:"優先順位付け",
+  s5_a4b:"マップが優先順位シーケンスを定義します：最初にどの層に取り組むか、各ステップの後に何を観察するか。",
+  s5_tools:"デジタル評価ツール——コンピュータビジョン、構造化アンケート——開発中。",
+  s5_note:"<b>原則：</b>測定は推奨に先行します——常に。",
+  s6_eyebrow:"05 · ナビゲーションフレームワーク",
+  s6_title:"ナビゲーションは介入より重要。",
+  s6_lead:"PRIMORDISは変化を単一のイベントではなくナビゲートされたサイクルとして扱います。すべての介入は測定と観察の間に組み込まれています：",
+  s6_st1:"評価",
+  s6_st2:"マッピング",
+  s6_st3:"優先順位付け",
+  s6_st4:"介入",
+  s6_st5:"観察",
+  s6_st6:"再評価",
+  s6_st7:"安定性追跡",
+  s6_back:"安定性が記録されるまでサイクルが繰り返されます",
+  s7_eyebrow:"06 · 研究プログラム",
+  s7_title:"研究プログラムであり、教義ではない。",
+  s7_lead:"PRIMORDISはオープンな研究プログラムとして構築されています。その主張は検証可能に組織化されており——誤りがあれば修正されます。",
+  s7_r1tag:"実証基盤",
+  s7_r1t:"観察",
+  s7_r1b:"3,500以上の記録された臨床観察が実証基盤を形成します：タイムラインとフォローアップを伴う構造化ケース。",
+  s7_r2tag:"研究中",
+  s7_r2t:"仮説",
+  s7_r2b:"中心的仮説——Primordocciput——は頭蓋頸椎接合部(C0)に系統的非対称が生じる可能性のある原発性変位点を提案します。事実としてではなく仮説として述べられています。",
+  s7_r3tag:"検証可能性",
+  s7_r3t:"反証基準",
+  s7_r3b:"各中心的主張は、それが偽とみなされる条件と対になっています。",
+  s7_r4tag:"最前線",
+  s7_r4t:"未解決の問題",
+  s7_r4b:"メカニズム、変化の持続性、集団変動性、フレームワークの限界は未解決のままです。",
+  s7_note:"<b>設計要件：</b>観察と仮説は常にそのように表示されます。科学的謙虚さはこのプラットフォームに組み込まれています。",
+  s8_eyebrow:"07 · ケースライブラリー",
+  s8_title:"ケースライブラリー。",
+  s8_lead:"構造化されたケースライブラリーが時間をかけてコンフィギュレーションを記録します。各ケースは5つの次元に沿って記録されます——説得のためではなく比較のために整理されています。",
+  s8_d1k:"症状パターン",
+  s8_d1v:"どのシグナルが、どちら側で、どの組み合わせで——観察開始時。",
+  s8_d2k:"コンフィギュレーションパターン",
+  s8_d2v:"構造的画像：軸、代償、荷重分布。",
+  s8_d3k:"タイムライン",
+  s8_d3v:"介入履歴と記録された観察のシーケンス。",
+  s8_d4k:"フォローアップ",
+  s8_d4v:"数週間・数ヶ月後に観察されること——選別なしで。",
+  s8_d5k:"結果観察",
+  s8_d5v:"何が変わり、何が変わらなかったか——そして何が未解決のままか。",
+  s8_disc:"<b>注意：</b>ケースは観察記録です。フレームワークを示しますが、有効性を証明するものではありません。",
+  s9_eyebrow:"08 · よくある質問",
+  s9_title:"正直な質問への誠実な回答。",
+  s9_q1:"PRIMORDISは医療サービスですか？",
+  s9_a1:"いいえ。PRIMORDISは研究主導のナビゲーションプラットフォームです。疾患の診断や治療は行わず、医療ケアの代替ともなりません。医療状態がある場合は、資格を持つ医師にご相談ください。",
+  s9_q2:"何が確立されており、何が仮説ですか？",
+  s9_a2:"記録された観察——構造化されたケース記録——が実証的層を形成します。Primordocciput仮説を含む説明的主張は、研究中の仮説として明示的に表示されています。",
+  s9_q3:"評価には何が含まれますか？",
+  s9_a3:"定義された参照点からの視覚的・姿勢的観察、動作パターン、構造化した自己観察。出力はコンフィギュレーションマップであり、診断ではありません。",
+  s9_q4:"どのような結果を期待すべきですか？",
+  s9_a4:"結果は約束されません。プラットフォームの約束は異なります：推奨前の測定、各ステップ後の観察、そして変わったこと——変わらなかったことの誠実な記録。",
+  s9_q5:"PRIMORDISはAnthroponomyとどのように関係しますか？",
+  s9_a5:"PRIMORDISは、構造的制約から機能的アクセシビリティ、潜在能力の実現までの連鎖を研究する新興学問Anthroponomyの応用的方法の一つです。",
+  s10_eyebrow:"09 · ナビゲーション開始",
+  s10_title:"ナビゲーションを始める。",
+  s10_lead:"最初のステップは評価です：あなたのコンフィギュレーションが観察・測定・マッピングされます。ルートはマップから始まります。",
+  s10_cta:"評価をリクエスト",
+  s10_note:"何も売りつけられることはありません。測定され、マッピングされ——あなた自身のコンフィギュレーションが示されます。",
+  f_line1:"PRIMORDIS — 人体コンフィギュレーションナビゲーションプラットフォーム。",
+  f_line2:"新興学問Anthroponomyの一部。",
+  f_disc:"教育・研究コンテンツ。医療アドバイスではありません。",
+  f_rights:"© 2026 PRIMORDIS. 観察と仮説はそのように表示されています。"
+  },
+  ko:{
+  nav_home:"홈",
+  nav_framework:"프레임워크",
+  nav_assessment:"평가",
+  nav_research:"연구",
+  nav_cases:"사례",
+  nav_faq:"FAQ",
+  hero_eyebrow:"PRIMORDIS — 연구 기반 플랫폼",
+  hero_title:"인체 구성<em>탐색</em>",
+  hero_sub:"구성이 상태, 수행 능력 및 잠재력 실현에 어떤 영향을 미치는지 이해합니다.",
+  hero_cta1:"탐색 시작",
+  hero_cta2:"프레임워크 탐색",
+  hero_note:"클리닉이 아닙니다. 치료 서비스가 아닙니다. 탐색 플랫폼입니다.",
+  hero_principle_label:"헌법적 원칙 01",
+  hero_principle:"구성은 인식에 앞선다.",
+  ax_s1:"상태",
+  ax_s1b:"느끼는 것",
+  ax_s2:"구성",
+  ax_s2b:"그것을 형성하는 것",
+  ax_s3:"탐색",
+  ax_s3b:"변화를 이끄는 방법",
+  hero_fig:"프레임워크의 도식적 설명 — 해부학적 묘사가 아닙니다.",
+  s2_eyebrow:"01 · 인체 상태",
+  s2_title:"느끼는 것은 상태이지, 구성이 아닙니다.",
+  s2_lead:"에너지, 집중력, 명료함, 감정 안정, 수면, 회복력—상태는 삶이 실제로 경험되는 방식입니다. PRIMORDIS는 당신이 시작하는 곳에서 시작합니다: 상태에서. 그런 다음 상태가 발생하는 상호 작용하는 레이어로 추적합니다.",
+  s2_ch1:"에너지",
+  s2_ch2:"집중력",
+  s2_ch3:"명료함",
+  s2_ch4:"감정 안정",
+  s2_ch5:"수면",
+  s2_ch6:"회복력",
+  s2_note:"<b>인식론적 상태:</b> 기록된 관찰에서 구성의 변화는 종종 상태의 변화를 동반합니다. 이것은 연구 중인 연관성이며, 의학적 주장이 아닙니다.",
+  s3_eyebrow:"02 · 인체 구성",
+  s3_title:"인체 구성이란 무엇인가?",
+  s3_lead:"구성은 다른 모든 시스템이 작동하는 구조적 관계의 기존 배열입니다: 두개척추축의 위치, 하중 분포, 그리고 눈을 수평으로 유지하기 위해 신체가 구축하는 보상 사슬.",
+  s3_l1t:"구조 축",
+  s3_l1b:"머리, 척추, 골반의 수직 조직—전체 시스템의 기준선.",
+  s3_l2t:"보상 사슬",
+  s3_l2b:"비대칭 하중을 대가로 균형을 유지하는 적응적 역이동.",
+  s3_l3t:"하중 분포",
+  s3_l3b:"체중, 긴장, 움직임이 구조 전체에서 공유되거나 집중되는 방식.",
+  s3_l4t:"적응 여력",
+  s3_l4b:"시스템이 신호를 생성하기 전에 새로운 하중을 흡수할 수 있는 남은 능력.",
+  s4_eyebrow:"03 · 증상 탐색기",
+  s4_title:"좌표로서의 증상.",
+  s4_lead:"증상은 실제입니다—하지만 상호 작용하는 레이어의 신호이지 진단이 아닙니다. 탐색기는 좌표로 조직합니다: 어떤 신호가, 어느 쪽에서, 어떤 조합으로, 언제부터.",
+  s4_c1tag:"카테고리",
+  s4_c1t:"신경학적",
+  s4_c1b:"두통, 어지러움, 긴장 패턴, 감각 소음.",
+  s4_c2tag:"카테고리",
+  s4_c2t:"근골격",
+  s4_c2b:"목, 등, 턱, 골반—일측 하중과 불편함.",
+  s4_c3tag:"카테고리",
+  s4_c3t:"인지",
+  s4_c3b:"집중력, 처리 속도, 정신적 피로, 안개.",
+  s4_c4tag:"카테고리",
+  s4_c4t:"감정",
+  s4_c4b:"안정성, 과민성, 배경 불안.",
+  s4_c5tag:"카테고리",
+  s4_c5t:"수면",
+  s4_c5b:"잠들기, 수면 유지, 아침 상태.",
+  s4_c6tag:"카테고리",
+  s4_c6t:"수행",
+  s4_c6b:"지구력, 회복, 정확도, 일관성.",
+  s4_close:"PRIMORDIS에서 증상은 결코 판결이 아닙니다. 탐색을 위한 좌표입니다.",
+  s5_eyebrow:"04 · 평가",
+  s5_title:"관찰. 측정. 매핑. 우선순위 지정.",
+  s5_lead:"탐색은 측정에서 시작됩니다. 현재 구성이 관찰되고 설명되기 전까지는 권고 사항이 제공되지 않습니다.",
+  s5_a1tag:"단계 1",
+  s5_a1t:"관찰",
+  s5_a1b:"정의된 기준점에서 기립 구조와 움직임을 관찰하고 기록합니다.",
+  s5_a2tag:"단계 2",
+  s5_a2t:"측정",
+  s5_a2b:"자세, 움직임 패턴, 구조화된 자기 관찰이 인상을 비교 가능한 데이터로 변환합니다.",
+  s5_a3tag:"단계 3",
+  s5_a3t:"매핑",
+  s5_a3b:"결과를 개인 구성 맵으로 조합합니다: 축 편차, 보상 사슬—진단이 아닌 구조화된 설명.",
+  s5_a4tag:"단계 4",
+  s5_a4t:"우선순위 지정",
+  s5_a4b:"맵이 우선순위 시퀀스를 정의합니다: 먼저 어떤 레이어를 처리할지, 각 단계 후 무엇을 관찰할지.",
+  s5_tools:"디지털 평가 도구—컴퓨터 비전, 구조화된 설문지—개발 중.",
+  s5_note:"<b>원칙:</b> 측정은 권고에 앞섭니다—항상.",
+  s6_eyebrow:"05 · 탐색 프레임워크",
+  s6_title:"탐색이 개입보다 중요합니다.",
+  s6_lead:"PRIMORDIS는 변화를 단일 사건이 아닌 탐색된 사이클로 취급합니다. 모든 개입은 측정과 관찰 사이에 포함됩니다:",
+  s6_st1:"평가",
+  s6_st2:"매핑",
+  s6_st3:"우선순위",
+  s6_st4:"개입",
+  s6_st5:"관찰",
+  s6_st6:"재평가",
+  s6_st7:"안정성 추적",
+  s6_back:"안정성이 기록될 때까지 사이클이 반복됩니다",
+  s7_eyebrow:"06 · 연구 프로그램",
+  s7_title:"연구 프로그램이지, 교리가 아닙니다.",
+  s7_lead:"PRIMORDIS는 개방형 연구 프로그램으로 구축되어 있습니다. 주장들은 검증 가능하도록 조직되어 있으며—잘못된 경우 수정됩니다.",
+  s7_r1tag:"실증 기반",
+  s7_r1t:"관찰",
+  s7_r1b:"3,500개 이상의 기록된 임상 관찰이 실증 기반을 형성합니다: 타임라인과 추적 관찰이 있는 구조화된 사례.",
+  s7_r2tag:"연구 중",
+  s7_r2t:"가설",
+  s7_r2b:"핵심 가설—Primordocciput—은 두개경추 접합부(C0)에 전신 비대칭이 발생할 수 있는 원발성 변위 지점을 제안합니다. 사실이 아닌 가설로 기술됩니다.",
+  s7_r3tag:"검증 가능성",
+  s7_r3t:"반증 기준",
+  s7_r3b:"각 핵심 주장은 거짓으로 간주되는 조건과 쌍을 이룹니다.",
+  s7_r4tag:"최전선",
+  s7_r4t:"미해결 질문",
+  s7_r4b:"메커니즘, 변화의 지속성, 집단 변동성, 프레임워크의 경계는 열려 있습니다.",
+  s7_note:"<b>설계 요건:</b> 관찰과 가설은 항상 그렇게 표시됩니다. 과학적 겸손이 이 플랫폼에 내장되어 있습니다.",
+  s8_eyebrow:"07 · 사례 라이브러리",
+  s8_title:"사례 라이브러리.",
+  s8_lead:"구조화된 사례 라이브러리가 시간이 지남에 따라 구성을 기록합니다. 각 사례는 5가지 차원에 걸쳐 기록됩니다—설득이 아닌 비교를 위해 조직됩니다.",
+  s8_d1k:"증상 패턴",
+  s8_d1v:"어떤 신호가, 어느 쪽에서, 어떤 조합으로—관찰 시작 시.",
+  s8_d2k:"구성 패턴",
+  s8_d2v:"구조적 이미지: 축, 보상, 하중 분포.",
+  s8_d3k:"타임라인",
+  s8_d3v:"개입 이력과 기록된 관찰의 시퀀스.",
+  s8_d4k:"추적 관찰",
+  s8_d4v:"수주, 수개월 후 관찰되는 것—선별 없이.",
+  s8_d5k:"결과 관찰",
+  s8_d5v:"무엇이 바뀌었고, 무엇이 바뀌지 않았으며—무엇이 열려 있는지.",
+  s8_disc:"<b>참고:</b> 사례는 관찰 기록입니다. 프레임워크를 설명하며; 효능을 증명하지 않습니다.",
+  s9_eyebrow:"08 · FAQ",
+  s9_title:"공정한 질문에 대한 솔직한 답변.",
+  s9_q1:"PRIMORDIS는 의료 서비스인가요?",
+  s9_a1:"아닙니다. PRIMORDIS는 연구 기반 탐색 플랫폼입니다. 질병을 진단하거나 치료하지 않으며 의료 서비스를 대체하지 않습니다. 의료 상태가 있는 경우 자격을 갖춘 의사에게 상담하십시오.",
+  s9_q2:"무엇이 확립되어 있고 무엇이 가설인가요?",
+  s9_a2:"기록된 관찰—구조화된 사례 기록—이 실증 레이어를 형성합니다. Primordocciput 가설을 포함한 설명적 주장은 연구 중인 가설로 명시적으로 표시됩니다.",
+  s9_q3:"평가에는 무엇이 포함되나요?",
+  s9_a3:"정의된 기준점에서의 시각적 및 자세 관찰, 움직임 패턴, 구조화된 자기 관찰. 출력은 진단이 아닌 구성 맵입니다.",
+  s9_q4:"어떤 결과를 기대해야 하나요?",
+  s9_a4:"어떤 결과도 약속되지 않습니다. 플랫폼의 약속은 다릅니다: 권고 전 측정, 각 단계 후 관찰, 그리고 변한 것과 변하지 않은 것의 솔직한 기록.",
+  s9_q5:"PRIMORDIS는 Anthroponomy와 어떤 관련이 있나요?",
+  s9_a5:"PRIMORDIS는 구조적 제약에서 기능적 접근성, 잠재력 실현으로 이어지는 사슬을 연구하는 신흥 학문 Anthroponomy 내의 응용 방법 중 하나입니다.",
+  s10_eyebrow:"09 · 탐색 시작",
+  s10_title:"탐색을 시작하세요.",
+  s10_lead:"첫 번째 단계는 평가입니다: 당신의 구성이 관찰되고, 측정되고, 매핑됩니다. 경로는 맵에서 시작됩니다.",
+  s10_cta:"평가 요청",
+  s10_note:"판매는 없습니다. 측정되고, 매핑되고——당신 자신의 구성이 보여집니다.",
+  f_line1:"PRIMORDIS — 인체 구성 탐색 플랫폼.",
+  f_line2:"신흥 학문 Anthroponomy의 일부.",
+  f_disc:"교육 및 연구 콘텐츠. 의료 조언이 아닙니다.",
+  f_rights:"© 2026 PRIMORDIS. 관찰과 가설은 그렇게 표시됩니다."
+  }
+};
+
+// ---------- state (in-memory; add persistence on deployment if desired) ----------
+let currentLang = "en";
+let currentTheme = "dark";
+
+// auto-detect language
+(function(){
+  const nav = (navigator.language || "en").toLowerCase();
+  if(nav.startsWith("ru") || nav.startsWith("uk") || nav.startsWith("kk") || nav.startsWith("ky") || nav.startsWith("uz")) currentLang = "ru";
+  else if(nav.startsWith("de")) currentLang = "de";
+  else if(nav.startsWith("es")) currentLang = "es";
+  else if(nav.startsWith("fr")) currentLang = "fr";
+  else if(nav.startsWith("ar")) currentLang = "ar";
+  else if(nav.startsWith("zh")) currentLang = "zh";
+  else if(nav.startsWith("ja")) currentLang = "ja";
+  else if(nav.startsWith("ko")) currentLang = "ko";
+})();
+
+function applyLang(lang){
+  currentLang = lang;
+  const dict = I18N[lang];
+  document.querySelectorAll("[data-i18n]").forEach(el=>{
+    const key = el.getAttribute("data-i18n");
+    if(dict[key] !== undefined) el.innerHTML = dict[key];
+  });
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+  document.querySelectorAll(".lang button").forEach(b=>{
+    b.classList.toggle("on", b.getAttribute("data-lang") === lang);
+  });
+}
+
+function applyTheme(theme){
+  currentTheme = theme;
+  document.documentElement.setAttribute("data-theme", theme);
+  const icon = document.getElementById("themeIcon");
+  if(theme === "dark"){
+    icon.innerHTML = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';
+  } else {
+    icon.innerHTML = '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>';
+  }
+}
+
+document.querySelectorAll(".lang button").forEach(b=>{
+  b.addEventListener("click", ()=>applyLang(b.getAttribute("data-lang")));
+});
+document.getElementById("themeBtn").addEventListener("click", ()=>{
+  applyTheme(currentTheme === "dark" ? "light" : "dark");
+});
+
+// reveal on scroll
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
+},{threshold:0.08});
+document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+
+applyLang(currentLang);
+applyTheme("dark");
+</script>
+</body>
+</html>
