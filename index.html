@@ -325,24 +325,141 @@ html[dir="rtl"] nav.main{margin-left:0;margin-right:auto;}
   .lang button{padding:4px 5px;font-size:11px;}
   .logo-word{font-size:12.5px;}
 }
+
+/* ---------- overflow lockdown (mobile) ---------- */
+html, body { overflow-x: hidden; }
+*, *::before, *::after { box-sizing: border-box; }
+.wrap { width: 100%; max-width: var(--maxw); }
+.hero-grid { width: 100%; }
+.axis-svg { width: 100%; height: auto; }
+.chips { width: 100%; }
+.cycle { width: 100%; }
+.dims { width: 100%; }
+.map-panel { width: 100%; }
+.faq { width: 100%; max-width: 100%; }
+.grid { width: 100%; }
+@media(max-width:600px){
+  .hero-grid { grid-template-columns: 1fr; }
+  .fig { display: none; }
+  .close-line { font-size: 17px; }
+  .final-cta { flex-direction: column; align-items: flex-start; }
+  .cta-row { flex-direction: column; align-items: flex-start; }
+  .btn { width: 100%; justify-content: center; }
+  .cycle { flex-direction: column; }
+  .arrow { display: none; }
+  .step { width: 100%; }
+  .cycle-back { margin-top: 12px; }
+}
+
+/* ── header ─────────────────────────────────────────────── */
+header{position:sticky;top:0;z-index:50;background:var(--header-bg);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line-soft);}
+.header-in{max-width:var(--maxw);margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;gap:20px;}
+.logo{display:flex;align-items:center;gap:11px;text-decoration:none;flex:none;}
+.logo-mark{width:14px;height:26px;position:relative;flex:none;}
+.logo-mark::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:1.5px;background:var(--text);transform:translateX(-50%);}
+.logo-mark::after{content:"";position:absolute;left:50%;top:5px;width:7px;height:7px;border-radius:50%;background:var(--accent);transform:translateX(calc(-50% + 4px));}
+.logo-word{font-weight:600;letter-spacing:.22em;font-size:14px;}
+
+/* desktop nav — 8 items, compact */
+nav.main{display:flex;align-items:center;gap:2px;margin-left:auto;overflow:hidden;}
+nav.main a{
+  font-size:12px;color:var(--muted);text-decoration:none;
+  padding:5px 8px;border-radius:6px;white-space:nowrap;
+  transition:color .18s,background .18s;letter-spacing:.01em;
+}
+nav.main a:hover{color:var(--text);background:var(--surface);}
+nav.main a.active{color:var(--accent);}
+nav.main a.nav-term{
+  font-family:var(--font-mono);font-size:11px;color:var(--accent);
+  border:1px solid var(--accent-soft);border-radius:5px;
+  padding:4px 7px;letter-spacing:.04em;
+}
+nav.main a.nav-term:hover{background:var(--accent-soft);}
+
+/* controls */
+.controls{display:flex;align-items:center;gap:8px;flex:none;margin-left:12px;}
+.lang{display:flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:7px;overflow:hidden;}
+.lang button{font-family:var(--font-mono);font-size:12px;padding:4px 7px;border:none;cursor:pointer;background:transparent;color:var(--muted);transition:.18s;flex:1 1 auto;min-width:28px;white-space:nowrap;}
+.lang button.on{background:var(--accent-soft);color:var(--accent);font-weight:500;}
+.theme-btn{width:32px;height:30px;border:1px solid var(--line);border-radius:7px;cursor:pointer;background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;transition:.18s;flex:none;}
+.theme-btn:hover{color:var(--text);border-color:var(--muted);}
+.burger-btn{display:none;width:32px;height:30px;border:1px solid var(--line);border-radius:7px;cursor:pointer;background:transparent;color:var(--muted);align-items:center;justify-content:center;flex:none;transition:.18s;}
+.burger-btn:hover{color:var(--text);}
+
+/* ── mobile drawer ───────────────────────────────────────── */
+.drawer-overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);
+  z-index:80;opacity:0;transition:opacity .25s;
+}
+.drawer-overlay.open{display:block;opacity:1;}
+.mobile-drawer{
+  position:fixed;top:0;right:0;bottom:0;width:min(300px,85vw);
+  background:var(--surface);border-left:1px solid var(--line-soft);
+  z-index:90;transform:translateX(100%);transition:transform .28s ease;
+  display:flex;flex-direction:column;overflow-y:auto;
+}
+.mobile-drawer.open{transform:translateX(0);}
+html[dir="rtl"] .mobile-drawer{right:auto;left:0;border-left:none;border-right:1px solid var(--line-soft);transform:translateX(-100%);}
+html[dir="rtl"] .mobile-drawer.open{transform:translateX(0);}
+.drawer-header{display:flex;align-items:center;justify-content:space-between;padding:20px 20px 16px;border-bottom:1px solid var(--line-soft);}
+.drawer-title{font-weight:600;letter-spacing:.18em;font-size:13px;}
+.drawer-header button{background:transparent;border:none;cursor:pointer;color:var(--muted);padding:4px;border-radius:5px;display:flex;align-items:center;justify-content:center;}
+.drawer-header button:hover{color:var(--text);}
+.drawer-links{display:flex;flex-direction:column;padding:12px 8px;flex:1;}
+.drawer-links a{
+  font-size:15px;color:var(--text-soft);text-decoration:none;
+  padding:13px 14px;border-radius:8px;transition:background .18s,color .18s;
+}
+.drawer-links a:hover{background:var(--surface-2);color:var(--text);}
+.drawer-links a.nav-term{font-family:var(--font-mono);color:var(--accent);font-size:13px;letter-spacing:.06em;}
+.drawer-links a.active{color:var(--accent);}
+.drawer-lang{padding:16px;border-top:1px solid var(--line-soft);display:flex;flex-wrap:wrap;gap:4px;}
+.drawer-lang button{font-family:var(--font-mono);font-size:12px;padding:5px 9px;border:1px solid var(--line);border-radius:5px;cursor:pointer;background:transparent;color:var(--muted);transition:.18s;}
+.drawer-lang button.on{background:var(--accent-soft);color:var(--accent);border-color:var(--accent-soft);}
+
+/* ── responsive breakpoints ──────────────────────────────── */
+/* 1180px: hide last 2 items */
+@media(max-width:1180px){
+  nav.main a[href="atlas.html"],
+  nav.main a[href="anthroponomy.html"]{display:none;}
+}
+/* 980px: hide all nav items, show burger */
+@media(max-width:980px){
+  nav.main{display:none;}
+  .burger-btn{display:flex;}
+  .controls{margin-left:auto;}
+  .lang{max-width:calc(100vw - 156px);flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;}
+  .lang::-webkit-scrollbar{display:none;}
+  .lang button{padding:4px 6px;font-size:11.5px;white-space:nowrap;flex:none;}
+}
+@media(max-width:600px){
+  .header-in{padding:0 16px;height:56px;gap:8px;}
+  .lang{max-width:calc(100vw - 120px);}
+  .lang button{padding:3px 5px;font-size:11px;}
+  .theme-btn,.burger-btn{width:30px;height:28px;}
+}
+
 </style>
 </head>
 <body>
 <div class="spine" aria-hidden="true"></div>
 
+
 <header>
   <div class="header-in">
-    <a class="logo" href="#top" aria-label="PRIMORDIS — home">
+    <a class="logo" href="index.html" aria-label="PRIMORDIS home">
       <span class="logo-mark" aria-hidden="true"></span>
       <span class="logo-word">PRIMORDIS</span>
     </a>
-    <nav class="main" aria-label="Main">
-      <a href="#top" data-i18n="nav_home"></a>
-      <a href="#framework" data-i18n="nav_framework"></a>
-      <a href="#assessment" data-i18n="nav_assessment"></a>
-      <a href="#research" data-i18n="nav_research"></a>
-      <a href="#cases" data-i18n="nav_cases"></a>
-      <a href="#faq" data-i18n="nav_faq"></a>
+    <nav class="main" id="mainNav" aria-label="Main navigation">
+      <a href="index.html"         data-i18n="nav_home"></a>
+      <a href="framework.html"     data-i18n="nav_framework" class=""></a>
+      <a href="assessment.html"    data-i18n="nav_assessment"></a>
+      <a href="cases.html"         data-i18n="nav_cases"></a>
+      <a href="research.html"      data-i18n="nav_research"></a>
+      <a href="primordocciput.html" class="nav-term" data-i18n="nav_primordocciput"></a>
+      <a href="atlas.html"         data-i18n="nav_atlas"></a>
+      <a href="anthroponomy.html"  data-i18n="nav_anthroponomy"></a>
     </nav>
     <div class="controls">
       <div class="lang" role="group" aria-label="Language">
@@ -355,15 +472,61 @@ html[dir="rtl"] nav.main{margin-left:0;margin-right:auto;}
         <button type="button" data-lang="zh">中文</button>
         <button type="button" data-lang="ja">日本語</button>
         <button type="button" data-lang="ko">한국어</button>
+        <button type="button" data-lang="et">ET</button>
+        <button type="button" data-lang="lv">LV</button>
       </div>
       <button type="button" class="theme-btn" id="themeBtn" aria-label="Toggle theme">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" id="themeIcon">
           <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
         </svg>
       </button>
+      <button type="button" class="burger-btn" id="burgerBtn" aria-label="Open navigation" aria-expanded="false" aria-controls="mobileDrawer">
+        <svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <line x1="0" y1="1" x2="18" y2="1"/>
+          <line x1="0" y1="7" x2="18" y2="7"/>
+          <line x1="0" y1="13" x2="18" y2="13"/>
+        </svg>
+      </button>
     </div>
   </div>
 </header>
+
+<!-- mobile drawer -->
+<div id="drawerOverlay" class="drawer-overlay" aria-hidden="true"></div>
+<nav id="mobileDrawer" class="mobile-drawer" aria-label="Mobile navigation" aria-hidden="true">
+  <div class="drawer-header">
+    <span class="drawer-title">PRIMORDIS</span>
+    <button type="button" id="drawerClose" aria-label="Close navigation">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <line x1="2" y1="2" x2="14" y2="14"/><line x1="14" y1="2" x2="2" y2="14"/>
+      </svg>
+    </button>
+  </div>
+  <div class="drawer-links">
+    <a href="index.html"          data-i18n="nav_home"></a>
+    <a href="framework.html"      data-i18n="nav_framework"></a>
+    <a href="assessment.html"     data-i18n="nav_assessment"></a>
+    <a href="cases.html"          data-i18n="nav_cases"></a>
+    <a href="research.html"       data-i18n="nav_research"></a>
+    <a href="primordocciput.html" class="nav-term" data-i18n="nav_primordocciput"></a>
+    <a href="atlas.html"          data-i18n="nav_atlas"></a>
+    <a href="anthroponomy.html"   data-i18n="nav_anthroponomy"></a>
+  </div>
+  <div class="drawer-lang">
+    <button type="button" data-lang="en">EN</button>
+    <button type="button" data-lang="de">DE</button>
+    <button type="button" data-lang="ru">RU</button>
+    <button type="button" data-lang="es">ES</button>
+    <button type="button" data-lang="fr">FR</button>
+    <button type="button" data-lang="ar">AR</button>
+    <button type="button" data-lang="zh">中文</button>
+    <button type="button" data-lang="ja">日本語</button>
+    <button type="button" data-lang="ko">한국어</button>
+    <button type="button" data-lang="et">ET</button>
+    <button type="button" data-lang="lv">LV</button>
+  </div>
+</nav>
+
 
 <main id="top">
 
@@ -599,7 +762,7 @@ html[dir="rtl"] nav.main{margin-left:0;margin-right:auto;}
 <script>
 const I18N = {
 en:{
-  nav_home:"Home", nav_framework:"Framework", nav_assessment:"Assessment", nav_research:"Research", nav_cases:"Cases", nav_faq:"FAQ",
+  nav_home:"Главная", nav_framework:"Подход", nav_assessment:"Оценка", nav_research:"Исследования", nav_cases:"Случаи", nav_faq:"FAQ",
   hero_eyebrow:"PRIMORDIS — research-driven platform",
   hero_title:"Human Configuration <em>Navigation</em>",
   hero_sub:"Understanding how configuration influences state, performance and potential realization.",
@@ -1734,6 +1897,296 @@ ru:{
   f_line2:"신흥 학문 Anthroponomy의 일부.",
   f_disc:"교육 및 연구 콘텐츠. 의료 조언이 아닙니다.",
   f_rights:"© 2026 PRIMORDIS. 관찰과 가설은 그렇게 표시됩니다."
+  },
+  et:{
+  nav_home:"Avaleht",
+  nav_framework:"Raamistik",
+  nav_assessment:"Hindamine",
+  nav_research:"Uuringud",
+  nav_cases:"Juhtumid",
+  nav_faq:"KKK",
+  hero_eyebrow:"PRIMORDIS — teaduspõhine platvorm",
+  hero_title:"Inimese konfiguratsiooni <em>navigatsioon</em>",
+  hero_sub:"Mõistame, kuidas konfiguratsioon mõjutab seisundit, sooritust ja potentsiaali realiseerimist.",
+  hero_cta1:"Alusta navigatsiooni",
+  hero_cta2:"Uuri raamistikku",
+  hero_note:"Mitte kliinik. Mitte raviteenus. Navigatsiooniplatvorm.",
+  hero_principle_label:"põhiseaduslik printsiip 01",
+  hero_principle:"Konfiguratsioon eelneb tajule.",
+  ax_s1:"SEISUND",
+  ax_s1b:"mida sa tunned",
+  ax_s2:"KONFIGURATSIOON",
+  ax_s2b:"mis seda kujundab",
+  ax_s3:"NAVIGATSIOON",
+  ax_s3b:"kuidas muutust juhtida",
+  hero_fig:"Raamistiku skemaatiline illustratsioon — mitte anatoomilise kujutis.",
+  s2_eyebrow:"01 · Inimese seisund",
+  s2_title:"Sa tunned seisundit — mitte konfiguratsiooni.",
+  s2_lead:"Energia, keskendumine, selgus, emotsionaalne stabiilsus, uni, vastupidavus — seisund on see, kuidas elu tegelikult kogetakse. PRIMORDIS algab sealt, kust sina alustad: seisundist. Seejärel jälgib seda kihtideni, millest see tekib.",
+  s2_ch1:"Energia",
+  s2_ch2:"Keskendumine",
+  s2_ch3:"Selgus",
+  s2_ch4:"Emotsionaalne stabiilsus",
+  s2_ch5:"Uni",
+  s2_ch6:"Vastupidavus",
+  s2_note:"<b>Episteemiline staatus:</b> dokumenteeritud vaatluste põhjal kaasnevad konfiguratsiooni muutustega sageli seisundi muutused. See on uuritav seos — mitte meditsiiniline väide.",
+  s3_eyebrow:"02 · Inimese konfiguratsioon",
+  s3_title:"Mis on inimese konfiguratsioon?",
+  s3_lead:"Konfiguratsioon on struktuurisuhete väljakujunenud korraldus, milles kõik teised süsteemid toimivad: kraniovertebraalse telje asend, koormuse jaotumine ja kompensatsioonahelad, mille keha üles ehitab.",
+  s3_l1t:"Struktuuritelg",
+  s3_l1b:"Pea, selgroo ja vaagna vertikaalne korraldus — kogu süsteemi telgjoon.",
+  s3_l2t:"Kompensatsioonahelad",
+  s3_l2b:"Kohanemisvõimelised vastasnihetused, mis säilitavad tasakaalu asümmeetrilise koormuse hinnaga.",
+  s3_l3t:"Koormuse jaotumine",
+  s3_l3b:"Kuidas kaal, pinge ja liikumine struktuuris jaotuvad või koonduvad.",
+  s3_l4t:"Kohanemisreserv",
+  s3_l4b:"Järelejäänud võime uut koormust absorbeerida enne, kui süsteem signaale toodab.",
+  s4_eyebrow:"03 · Sümptomite uurija",
+  s4_title:"Sümptomid kui koordinaadid.",
+  s4_lead:"Sümptomid on reaalsed — kuid need on omavahel suhtlevate kihtide signaalid, mitte diagnoosid. Uurija korraldab need koordinaatidena: millised signaalid, kummal poolel, millises kombinatsioonis, millest saati.",
+  s4_c1tag:"kategooria",
+  s4_c1t:"Neuroloogiline",
+  s4_c1b:"Peavalu, pearinglus, pingemustrid, sensoorne müra.",
+  s4_c2tag:"kategooria",
+  s4_c2t:"Luu-lihassüsteem",
+  s4_c2b:"Kael, selg, lõug, vaagen — ühepoolne koormus ja ebamugavus.",
+  s4_c3tag:"kategooria",
+  s4_c3t:"Kognitiivne",
+  s4_c3b:"Keskendumine, töötluskiirus, vaimne väsimus, udu.",
+  s4_c4tag:"kategooria",
+  s4_c4t:"Emotsionaalne",
+  s4_c4b:"Stabiilsus, ärrituvus, taustalev rahutus.",
+  s4_c5tag:"kategooria",
+  s4_c5t:"Uni",
+  s4_c5b:"Uinumine, une säilitamine, hommikune seisund.",
+  s4_c6tag:"kategooria",
+  s4_c6t:"Sooritus",
+  s4_c6b:"Vastupidavus, taastumine, täpsus, järjepidevus.",
+  s4_close:"PRIMORDISes pole sümptom kunagi otsus. See on navigatsiooni koordinaat.",
+  s5_eyebrow:"04 · Hindamine",
+  s5_title:"Vaatlemine. Mõõtmine. Kaardistamine. Prioritiseerimine.",
+  s5_lead:"Navigatsioon algab mõõtmisest. Ühtegi soovitust ei anta enne, kui praegune konfiguratsioon on vaadeldud ja kirjeldatud.",
+  s5_a1tag:"samm 1",
+  s5_a1t:"Vaatlemine",
+  s5_a1b:"Seisva struktuuri ja liikumist vaadeldakse määratletud tugipunktidest ning dokumenteeritakse.",
+  s5_a2tag:"samm 2",
+  s5_a2t:"Mõõtmine",
+  s5_a2b:"Kehahoiak, liikumismustrid ja struktureeritud enesejälgimine muudavad muljed võrreldavateks andmeteks.",
+  s5_a3tag:"samm 3",
+  s5_a3t:"Kaardistamine",
+  s5_a3b:"Tulemused koostatakse individuaalseks konfiguratsioonkaardiks: telje kõrvalekalle, kompensatsioonahelad — struktureeritud kirjeldus, mitte diagnoos.",
+  s5_a4tag:"samm 4",
+  s5_a4t:"Prioritiseerimine",
+  s5_a4b:"Kaart määratleb prioriteetide jada: millist kihti kõigepealt käsitleda ja mida pärast iga sammu jälgida.",
+  s5_tools:"Digitaalsed hindamisvahendid — arvutinägemine, struktureeritud küsimustikud — arendamisel.",
+  s5_note:"<b>Printsiip:</b> mõõtmine eelneb soovitusele — alati.",
+  s6_eyebrow:"05 · Navigatsiooni raamistik",
+  s6_title:"Navigatsioon on olulisem kui sekkumine.",
+  s6_lead:"PRIMORDIS käsitleb muutust navigeeritud tsüklina, mitte ühekordsena sündmusena. Iga sekkumine on mõõtmise ja vaatluse vahele lõimitud:",
+  s6_st1:"Hindamine",
+  s6_st2:"Kaardistamine",
+  s6_st3:"Prioritiseerimine",
+  s6_st4:"Sekkumine",
+  s6_st5:"Vaatlus",
+  s6_st6:"Ümberhinne",
+  s6_st7:"Stabiilsuse jälgimine",
+  s6_back:"tsükkel kordub, kuni stabiilsus on dokumenteeritud",
+  s7_eyebrow:"06 · Uurimisprogramm",
+  s7_title:"Uurimisprogramm, mitte dogma.",
+  s7_lead:"PRIMORDIS on üles ehitatud avatud uurimisprogrammina. Selle väited on korraldatud nii, et neid saab testida — ja vajadusel parandada.",
+  s7_r1tag:"empiiriline alus",
+  s7_r1t:"Vaatlused",
+  s7_r1b:"Üle 3500 dokumenteeritud kliinilise vaatluse moodustavad empiirilise aluse: struktureeritud juhtumid ajaskaalade ja järelkontrolliga.",
+  s7_r2tag:"uurimisel",
+  s7_r2t:"Hüpoteesid",
+  s7_r2b:"Keskne hüpotees — Primordocciput — pakub välja esmase nihkepunkti kranio-emakakaela liitsel (C0), millest võib süsteemne asümmeetria saada alguse. See on esitatud hüpoteesina, mitte faktina.",
+  s7_r3tag:"kontrollitavus",
+  s7_r3t:"Falsifitseerimise kriteeriumid",
+  s7_r3b:"Iga põhiväitega kaasnevad tingimused, mille korral seda peetaks vääraks.",
+  s7_r4tag:"piiriala",
+  s7_r4t:"Avatud küsimused",
+  s7_r4b:"Mehhanismid, muutuste püsivus, populatsioonivarieeruvus ja raamistiku piirid jäävad avatuks.",
+  s7_note:"<b>Disaininõue:</b> vaatlused ja hüpoteesid on alati sellistena märgistatud. Teaduslik tagasihoidlikkus on sellesse platvorm sisse ehitatud.",
+  s8_eyebrow:"07 · Juhtumite kogu",
+  s8_title:"Juhtumite kogu.",
+  s8_lead:"Struktureeritud juhtumite kogu dokumenteerib konfiguratsioone aja jooksul. Iga juhtum registreeritakse viie mõõtme lõikes — korraldatuna võrdlemiseks, mitte veenmiseks.",
+  s8_d1k:"Sümptomimuster",
+  s8_d1v:"Millised signaalid, kummal poolel, millises kombinatsioonis — vaatluse alguses.",
+  s8_d2k:"Konfiguratsioonimuster",
+  s8_d2v:"Struktuurne pilt: telg, kompensatsioonid, koormuse jaotumine.",
+  s8_d3k:"Ajaskaala",
+  s8_d3v:"Sekkumiste ajalugu ja dokumenteeritud vaatluste järjestus.",
+  s8_d4k:"Järelkontroll",
+  s8_d4v:"Mida täheldatakse nädalate ja kuude pärast — ilma valikuta.",
+  s8_d5k:"Tulemuse vaatlus",
+  s8_d5v:"Mis muutus, mis mitte — ja mis jääb avatuks.",
+  s8_disc:"<b>Märkus:</b> juhtumid on vaatlusandmed. Need illustreerivad raamistikku; ei tõesta efektiivsust.",
+  s9_eyebrow:"08 · KKK",
+  s9_title:"Ausad vastused õiglastele küsimustele.",
+  s9_q1:"Kas PRIMORDIS on meditsiiniline teenus?",
+  s9_a1:"Ei. PRIMORDIS on teaduspõhine navigatsiooniplatvorm. See ei diagnoosi ega ravi haigusi ning ei asenda meditsiinilist abi. Meditsiinilise seisundi korral konsulteerige kvalifitseeritud arstiga.",
+  s9_q2:"Mis on tõestatud ja mis on hüpotees?",
+  s9_a2:"Dokumenteeritud vaatlused — struktureeritud juhtumite andmed — moodustavad empiirilise kihi. Selgitavad väited, sealhulgas Primordocciput'i hüpotees, on selgesõnaliselt märgistatud uuritavate hüpoteesidena.",
+  s9_q3:"Mida hindamine hõlmab?",
+  s9_a3:"Visuaalne ja posturaalset vaatlus määratletud tugipunktidest, liikumismustrid ja struktureeritud enesejälgimine. Väljundiks on konfiguratsioonkaart, mitte diagnoos.",
+  s9_q4:"Milliseid tulemusi oodata?",
+  s9_a4:"Ühtegi tulemust ei lubata. Platvormi kohustus on erinev: mõõtmine enne soovitust, vaatlus pärast iga sammu ja aus dokumenteerimine sellest, mis muutub — ja mis mitte.",
+  s9_q5:"Kuidas PRIMORDIS seostub Antroponoomia?",
+  s9_a5:"PRIMORDIS on üks rakenduslikest meetoditest kujuneva teadusharu Antroponoomia raames, mis uurib ahelat struktuurilisest piirangutest funktsionaalse ligipääsetavuseni ja potentsiaali realiseerimiseni.",
+  s10_eyebrow:"09 · Alusta navigatsiooni",
+  s10_title:"Alusta navigatsiooni.",
+  s10_lead:"Esimene samm on hindamine: sinu konfiguratsioon vaadeldakse, mõõdetakse ja kaardistatakse. Marsruut algab kaardist.",
+  s10_cta:"Taotle hindamist",
+  s10_note:"Sulle midagi ei müüda. Sind mõõdetakse, kaardistatakse — ja sulle näidatakse sinu enda konfiguratsiooni.",
+  f_line1:"PRIMORDIS — inimese konfiguratsiooni navigatsiooniplatvorm.",
+  f_line2:"Osa kujunevast teadusharust Antroponoomia.",
+  f_disc:"Hariduslik ja teaduslik sisu. Mitte meditsiiniline nõuanne.",
+  f_rights:"© 2026 PRIMORDIS. Vaatlused ja hüpoteesid on sellistena märgistatud."
+  },
+  lv:{
+  nav_home:"Sākums",
+  nav_framework:"Ietvars",
+  nav_assessment:"Novērtēšana",
+  nav_research:"Pētījumi",
+  nav_cases:"Gadījumi",
+  nav_faq:"BUJ",
+  hero_eyebrow:"PRIMORDIS — uz pētījumiem balstīta platforma",
+  hero_title:"Cilvēka konfigurācijas <em>navigācija</em>",
+  hero_sub:"Izprotam, kā konfigurācija ietekmē stāvokli, sniegumu un potenciāla realizēšanu.",
+  hero_cta1:"Sākt navigāciju",
+  hero_cta2:"Izpētīt ietvaru",
+  hero_note:"Nav klīnika. Nav ārstēšanas pakalpojums. Navigācijas platforma.",
+  hero_principle_label:"konstitucionālais princips 01",
+  hero_principle:"Konfigurācija ir pirms uztveres.",
+  ax_s1:"STĀVOKLIS",
+  ax_s1b:"ko tu jūti",
+  ax_s2:"KONFIGURĀCIJA",
+  ax_s2b:"kas to veido",
+  ax_s3:"NAVIGĀCIJA",
+  ax_s3b:"kā vadīt izmaiņas",
+  hero_fig:"Ietvara shematisks attēls — nav anatomisks attēlojums.",
+  s2_eyebrow:"01 · Cilvēka stāvoklis",
+  s2_title:"Tu jūti stāvokli — nevis konfigurāciju.",
+  s2_lead:"Enerģija, koncentrēšanās, skaidrība, emocionālā stabilitāte, miegs, noturība — stāvoklis ir veids, kā dzīve tiek pieredzēta. PRIMORDIS sākas no turienes, kur tu sāc: ar stāvokli. Tad seko tam līdz mijiedarbojošajiem slāņiem, no kuriem tas rodas.",
+  s2_ch1:"Enerģija",
+  s2_ch2:"Koncentrēšanās",
+  s2_ch3:"Skaidrība",
+  s2_ch4:"Emocionālā stabilitāte",
+  s2_ch5:"Miegs",
+  s2_ch6:"Noturība",
+  s2_note:"<b>Epistēmiskais statuss:</b> dokumentētos novērojumos konfigurācijas izmaiņas bieži pavada stāvokļa izmaiņas. Tā ir pētāma saistība — nevis medicīnisks apgalvojums.",
+  s3_eyebrow:"02 · Cilvēka konfigurācija",
+  s3_title:"Kas ir cilvēka konfigurācija?",
+  s3_lead:"Konfigurācija ir izveidojušies strukturālo attiecību sakārtojums, kurā darbojas visas pārējās sistēmas: galvaskausa-mugurkaula ass pozīcija, slodzes sadalījums un kompensācijas ķēdes, ko ķermenis veido.",
+  s3_l1t:"Strukturālā ass",
+  s3_l1b:"Galvas, mugurkaula un iegurņa vertikālā organizācija — visas sistēmas atsauces līnija.",
+  s3_l2t:"Kompensācijas ķēdes",
+  s3_l2b:"Adaptīvas pretvirziena nobīdes, kas saglabā līdzsvaru uz asimetriskas slodzes rēķina.",
+  s3_l3t:"Slodzes sadalījums",
+  s3_l3b:"Kā svars, spriedze un kustība tiek sadalīti — vai koncentrēti — struktūrā.",
+  s3_l4t:"Adaptācijas rezerve",
+  s3_l4b:"Atlikušā spēja absorbēt jaunu slodzi, pirms sistēma ražo signālus.",
+  s4_eyebrow:"03 · Simptomu pētnieks",
+  s4_title:"Simptomi kā koordinātas.",
+  s4_lead:"Simptomi ir reāli — bet tie ir mijiedarbojošo slāņu signāli, nevis diagnozes. Pētnieks tos organizē kā koordinātas: kādi signāli, kurā pusē, kādā kombinācijā, kopš kura laika.",
+  s4_c1tag:"kategorija",
+  s4_c1t:"Neiroloģiski",
+  s4_c1b:"Galvassāpes, reibonis, spriedzes modeļi, sensorais troksnis.",
+  s4_c2tag:"kategorija",
+  s4_c2t:"Muskuļu-skeleta",
+  s4_c2b:"Kakls, mugura, žoklis, iegurnis — vienpusēja slodze un diskomforts.",
+  s4_c3tag:"kategorija",
+  s4_c3t:"Kognitīvi",
+  s4_c3b:"Koncentrēšanās, apstrādes ātrums, garīgais nogurums, migla.",
+  s4_c4tag:"kategorija",
+  s4_c4t:"Emocionāli",
+  s4_c4b:"Stabilitāte, aizkaitināmība, fona nemiers.",
+  s4_c5tag:"kategorija",
+  s4_c5t:"Miegs",
+  s4_c5b:"Aizmigšana, miega uzturēšana, rīta stāvoklis.",
+  s4_c6tag:"kategorija",
+  s4_c6t:"Sniegums",
+  s4_c6b:"Izturība, atveseļošanās, precizitāte, konsekvence.",
+  s4_close:"PRIMORDIS ietvaros simptoms nekad nav spriedums. Tas ir koordināts navigācijai.",
+  s5_eyebrow:"04 · Novērtēšana",
+  s5_title:"Novērot. Mērīt. Kartēt. Noteikt prioritātes.",
+  s5_lead:"Navigācija sākas ar mērīšanu. Neviens ieteikums netiek sniegts, kamēr pašreizējā konfigurācija nav novērota un aprakstīta.",
+  s5_a1tag:"1. solis",
+  s5_a1t:"Novērošana",
+  s5_a1b:"Stāvošā struktūra un kustība tiek novērotas no definētiem atskaites punktiem un dokumentētas.",
+  s5_a2tag:"2. solis",
+  s5_a2t:"Mērīšana",
+  s5_a2b:"Poza, kustību modeļi un strukturēta pašnovērošana pārvērš iespaidus salīdzināmos datos.",
+  s5_a3tag:"3. solis",
+  s5_a3t:"Kartēšana",
+  s5_a3b:"Rezultāti tiek apkopoti individuālā konfigurācijas kartē: ass novirze, kompensācijas ķēdes — strukturēts apraksts, nevis diagnoze.",
+  s5_a4tag:"4. solis",
+  s5_a4t:"Prioritāšu noteikšana",
+  s5_a4b:"Karte nosaka prioritāšu secību: kuru slāni risināt vispirms un ko novērot pēc katra soļa.",
+  s5_tools:"Digitālie novērtēšanas rīki — datorredzēšana, strukturētas anketas — izstrādē.",
+  s5_note:"<b>Princips:</b> mērīšana ir pirms ieteikuma — vienmēr.",
+  s6_eyebrow:"05 · Navigācijas ietvars",
+  s6_title:"Navigācija ir svarīgāka par iejaukšanos.",
+  s6_lead:"PRIMORDIS pret izmaiņām izturas kā pret navigētu ciklu, nevis vienreizēju notikumu. Katra iejaukšanās ir iestrādāta starp mērīšanu un novērošanu:",
+  s6_st1:"Novērtēšana",
+  s6_st2:"Kartēšana",
+  s6_st3:"Prioritātes",
+  s6_st4:"Iejaukšanās",
+  s6_st5:"Novērošana",
+  s6_st6:"Atkārtota novērtēšana",
+  s6_st7:"Stabilitātes izsekošana",
+  s6_back:"cikls atkārtojas, līdz stabilitāte ir dokumentēta",
+  s7_eyebrow:"06 · Pētījumu programma",
+  s7_title:"Pētījumu programma, nevis doktrīna.",
+  s7_lead:"PRIMORDIS ir izveidots kā atvērta pētījumu programma. Tā apgalvojumi ir organizēti tā, lai tos varētu pārbaudīt — un, kur tie ir kļūdaini, labot.",
+  s7_r1tag:"empīriskā bāze",
+  s7_r1t:"Novērojumi",
+  s7_r1b:"Vairāk nekā 3500 dokumentētu klīnisko novērojumu veido empīrisko bāzi: strukturizēti gadījumi ar laika skalām un novērošanu.",
+  s7_r2tag:"pētīšanā",
+  s7_r2t:"Hipotēzes",
+  s7_r2b:"Centrālā hipotēze — Primordocciput — ierosina primāru nobīdes punktu galvaskausa-dzemdes kakla savienojumā (C0), no kura var rasties sistēmiska asimetrija. Tā tiek izteikta kā hipotēze, nevis fakts.",
+  s7_r3tag:"pārbaudāmība",
+  s7_r3t:"Falsifikācijas kritēriji",
+  s7_r3b:"Katrs galvenais apgalvojums ir savienots ar nosacījumiem, kādos tas tiktu uzskatīts par nepatiesu.",
+  s7_r4tag:"robeža",
+  s7_r4t:"Atklātie jautājumi",
+  s7_r4b:"Mehānismi, izmaiņu ilgums, populācijas mainīgums un ietvara robežas paliek atvērti.",
+  s7_note:"<b>Dizaina prasība:</b> novērojumi un hipotēzes vienmēr tiek apzīmēti kā tādi. Zinātniskā pieticība ir iebūvēta šajā platformā.",
+  s8_eyebrow:"07 · Gadījumu bibliotēka",
+  s8_title:"Gadījumu bibliotēka.",
+  s8_lead:"Strukturizēta gadījumu bibliotēka dokumentē konfigurācijas laika gaitā. Katrs gadījums tiek reģistrēts piecās dimensijās — organizēts salīdzināšanai, nevis pārliecināšanai.",
+  s8_d1k:"Simptomu modelis",
+  s8_d1v:"Kādi signāli, kurā pusē, kādā kombinācijā — novērojuma sākumā.",
+  s8_d2k:"Konfigurācijas modelis",
+  s8_d2v:"Strukturālais attēls: ass, kompensācijas, slodzes sadalījums.",
+  s8_d3k:"Laika skala",
+  s8_d3v:"Iejaukšanās vēsture un dokumentēto novērojumu secība.",
+  s8_d4k:"Turpmāka novērojumi",
+  s8_d4v:"Kas tiek novērots nedēļas un mēnešus vēlāk — bez atlases.",
+  s8_d5k:"Rezultāta novērojums",
+  s8_d5v:"Kas mainījās, kas ne — un kas paliek atklāts.",
+  s8_disc:"<b>Piezīme:</b> gadījumi ir novērojumu ieraksti. Tie ilustrē ietvaru; neapliecina efektivitāti.",
+  s9_eyebrow:"08 · BUJ",
+  s9_title:"Godīgas atbildes uz godīgiem jautājumiem.",
+  s9_q1:"Vai PRIMORDIS ir medicīnisks pakalpojums?",
+  s9_a1:"Nē. PRIMORDIS ir uz pētījumiem balstīta navigācijas platforma. Tā nediagnozē un neārstē slimības un neaizstāj medicīnisko aprūpi. Ja jums ir medicīnisks stāvoklis, konsultējieties ar kvalificētu ārstu.",
+  s9_q2:"Kas ir noskaidrots un kas ir hipotēze?",
+  s9_a2:"Dokumentētie novērojumi — strukturizēti gadījumu ieraksti — veido empīrisko slāni. Skaidrojošie apgalvojumi, tostarp Primordocciput hipotēze, ir skaidri apzīmēti kā pētāmas hipotēzes.",
+  s9_q3:"Ko ietver novērtēšana?",
+  s9_a3:"Vizuāla un posturāla novērošana no definētiem atsauces punktiem, kustību modeļi un strukturēta pašnovērošana. Rezultāts ir konfigurācijas karte, nevis diagnoze.",
+  s9_q4:"Kādus rezultātus gaidīt?",
+  s9_a4:"Neviens rezultāts netiek apsolīts. Platformas saistības ir citādas: mērīšana pirms ieteikuma, novērošana pēc katra soļa un godīga dokumentēšana par to, kas mainās — un kas nemainās.",
+  s9_q5:"Kā PRIMORDIS saistās ar Antroponomiku?",
+  s9_a5:"PRIMORDIS ir viena no piemērotajām metodēm topošajā disciplīnā Antroponomika, kas pēta ķēdi no strukturāliem ierobežojumiem līdz funkcionālajai pieejamībai un potenciāla realizēšanai.",
+  s10_eyebrow:"09 · Sākt navigāciju",
+  s10_title:"Sāciet navigāciju.",
+  s10_lead:"Pirmais solis ir novērtēšana: jūsu konfigurācija tiek novērota, izmērīta un kartēta. Maršruts sākas no kartes.",
+  s10_cta:"Pieprasīt novērtēšanu",
+  s10_note:"Jums nekas netiks pārdots. Jūs tiksit izmērīts, kartēts — un jums tiks parādīta jūsu pašu konfigurācija.",
+  f_line1:"PRIMORDIS — cilvēka konfigurācijas navigācijas platforma.",
+  f_line2:"Daļa no topošās disciplīnas Antroponomika.",
+  f_disc:"Izglītojošs un zinātnisks saturs. Nav medicīnisks padoms.",
+  f_rights:"© 2026 PRIMORDIS. Novērojumi un hipotēzes apzīmētas kā tādas."
   }
 };
 
@@ -1752,6 +2205,8 @@ let currentTheme = "dark";
   else if(nav.startsWith("zh")) currentLang = "zh";
   else if(nav.startsWith("ja")) currentLang = "ja";
   else if(nav.startsWith("ko")) currentLang = "ko";
+  else if(nav.startsWith("et")) currentLang = "et";
+  else if(nav.startsWith("lv")) currentLang = "lv";
 })();
 
 function applyLang(lang){
@@ -1794,6 +2249,46 @@ document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
 
 applyLang(currentLang);
 applyTheme("dark");
+
+// ── mobile drawer ────────────────────────────────────────────────────────────
+const burger = document.getElementById('burgerBtn');
+const drawer = document.getElementById('mobileDrawer');
+const overlay = document.getElementById('drawerOverlay');
+const dClose = document.getElementById('drawerClose');
+
+function openDrawer(){
+  drawer.classList.add('open');
+  overlay.classList.add('open');
+  drawer.setAttribute('aria-hidden','false');
+  burger.setAttribute('aria-expanded','true');
+  document.body.style.overflow='hidden';
+}
+function closeDrawer(){
+  drawer.classList.remove('open');
+  overlay.classList.remove('open');
+  drawer.setAttribute('aria-hidden','true');
+  burger.setAttribute('aria-expanded','false');
+  document.body.style.overflow='';
+}
+burger && burger.addEventListener('click', openDrawer);
+dClose && dClose.addEventListener('click', closeDrawer);
+overlay && overlay.addEventListener('click', closeDrawer);
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeDrawer(); });
+
+// drawer links close drawer on tap
+document.querySelectorAll('.drawer-links a').forEach(a=>{
+  a.addEventListener('click', closeDrawer);
+});
+
+// drawer lang buttons mirror main lang buttons
+document.querySelectorAll('.drawer-lang button').forEach(b=>{
+  b.addEventListener('click', ()=>{
+    applyLang(b.dataset.lang);
+    // sync drawer lang button states
+    document.querySelectorAll('.drawer-lang button').forEach(x=>x.classList.toggle('on', x.dataset.lang===b.dataset.lang));
+  });
+});
+
 </script>
 </body>
 </html>
