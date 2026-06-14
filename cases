@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case Library — PRIMORDIS</title>
+<meta name="description" content="Structured case observations from the PRIMORDIS clinical archive. Each case documents configuration, compensation chain, timeline and follow-up.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --maxw:1080px;
+  --font-display:'Spectral',Georgia,serif;
+  --font-body:'IBM Plex Sans',-apple-system,'Segoe UI',sans-serif;
+  --font-mono:'IBM Plex Mono','SF Mono',monospace;
+}
+html[data-theme="dark"]{
+  --bg:#101418;--bg-soft:#141A20;--surface:#1A2129;--surface-2:#1F2731;
+  --text:#E6EAED;--text-soft:#C3CBD2;--muted:#8E99A3;
+  --line:#2B343E;--line-soft:#222B34;
+  --accent:#D2904F;--accent-soft:rgba(210,144,79,.13);--accent-2:#86A9BD;
+  --header-bg:rgba(16,20,24,.84);--shadow:0 12px 36px rgba(0,0,0,.4);
+  --img-bg:#0C1014;
+}
+html[data-theme="light"]{
+  --bg:#F2F3F1;--bg-soft:#ECEEEC;--surface:#FAFBFA;--surface-2:#FFFFFF;
+  --text:#21262B;--text-soft:#3A434B;--muted:#5C6770;
+  --line:#D7DCDE;--line-soft:#E2E6E7;
+  --accent:#A05A19;--accent-soft:rgba(160,90,25,.09);--accent-2:#3E6478;
+  --header-bg:rgba(242,243,241,.88);--shadow:0 10px 30px rgba(30,40,50,.08);
+  --img-bg:#1A1F24;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{overflow-x:hidden;scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;transition:background .3s,color .3s;}
+::selection{background:var(--accent-soft);}
+a{color:inherit;text-decoration:none;}
+
+/* spine */
+.spine{position:fixed;left:34px;top:0;bottom:0;width:1px;background:var(--line-soft);z-index:0;pointer-events:none;}
+@media(max-width:1180px){.spine{display:none;}}
+
+/* ── header ─────────────────────────────────────────────── */
+header{position:sticky;top:0;z-index:50;background:var(--header-bg);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line-soft);}
+.header-in{max-width:var(--maxw);margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;gap:20px;}
+.logo{display:flex;align-items:center;gap:11px;text-decoration:none;flex:none;}
+.logo-mark{width:14px;height:26px;position:relative;flex:none;}
+.logo-mark::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:1.5px;background:var(--text);transform:translateX(-50%);}
+.logo-mark::after{content:"";position:absolute;left:50%;top:5px;width:7px;height:7px;border-radius:50%;background:var(--accent);transform:translateX(calc(-50% + 4px));}
+.logo-word{font-weight:600;letter-spacing:.22em;font-size:14px;}
+nav.main{display:flex;align-items:center;gap:2px;margin-left:auto;overflow:hidden;}
+nav.main a{font-size:12px;color:var(--muted);text-decoration:none;padding:5px 8px;border-radius:6px;white-space:nowrap;transition:color .18s,background .18s;}
+nav.main a:hover{color:var(--text);background:var(--surface);}
+nav.main a.active{color:var(--accent);}
+nav.main a.nav-term{font-family:var(--font-mono);font-size:11px;color:var(--accent);border:1px solid var(--accent-soft);border-radius:5px;padding:4px 7px;letter-spacing:.04em;}
+nav.main a.nav-term:hover{background:var(--accent-soft);}
+.controls{display:flex;align-items:center;gap:8px;flex:none;margin-left:12px;}
+.lang{display:flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:7px;overflow:hidden;}
+.lang button{font-family:var(--font-mono);font-size:12px;padding:4px 7px;border:none;cursor:pointer;background:transparent;color:var(--muted);transition:.18s;flex:1 1 auto;min-width:28px;white-space:nowrap;}
+.lang button.on{background:var(--accent-soft);color:var(--accent);font-weight:500;}
+.theme-btn{width:32px;height:30px;border:1px solid var(--line);border-radius:7px;cursor:pointer;background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;transition:.18s;flex:none;}
+.theme-btn:hover{color:var(--text);}
+.burger-btn{display:none;width:32px;height:30px;border:1px solid var(--line);border-radius:7px;cursor:pointer;background:transparent;color:var(--muted);align-items:center;justify-content:center;flex:none;transition:.18s;}
+.burger-btn:hover{color:var(--text);}
+@media(max-width:1180px){nav.main a[href="atlas.html"],nav.main a[href="anthroponomy.html"]{display:none;}}
+@media(max-width:980px){nav.main{display:none;}.burger-btn{display:flex;}.controls{margin-left:auto;}.lang{max-width:calc(100vw - 120px);flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;}.lang::-webkit-scrollbar{display:none;}.lang button{padding:4px 6px;font-size:11.5px;white-space:nowrap;flex:none;}}
+@media(max-width:600px){.header-in{padding:0 16px;height:56px;gap:8px;}.lang{max-width:calc(100vw - 120px);}.lang button{padding:3px 5px;font-size:11px;}.theme-btn,.burger-btn{width:30px;height:28px;}}
+
+/* drawer */
+.drawer-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:80;opacity:0;transition:opacity .25s;}
+.drawer-overlay.open{display:block;opacity:1;}
+.mobile-drawer{position:fixed;top:0;right:0;bottom:0;width:min(300px,85vw);background:var(--surface);border-left:1px solid var(--line-soft);z-index:90;transform:translateX(100%);transition:transform .28s ease;display:flex;flex-direction:column;overflow-y:auto;}
+.mobile-drawer.open{transform:translateX(0);}
+html[dir="rtl"] .mobile-drawer{right:auto;left:0;border-left:none;border-right:1px solid var(--line-soft);transform:translateX(-100%);}
+html[dir="rtl"] .mobile-drawer.open{transform:translateX(0);}
+.drawer-header{display:flex;align-items:center;justify-content:space-between;padding:20px 20px 16px;border-bottom:1px solid var(--line-soft);}
+.drawer-title{font-weight:600;letter-spacing:.18em;font-size:13px;}
+.drawer-header button{background:transparent;border:none;cursor:pointer;color:var(--muted);padding:4px;border-radius:5px;display:flex;}
+.drawer-links{display:flex;flex-direction:column;padding:12px 8px;flex:1;}
+.drawer-links a{font-size:15px;color:var(--text-soft);text-decoration:none;padding:13px 14px;border-radius:8px;transition:background .18s,color .18s;}
+.drawer-links a:hover{background:var(--surface-2);color:var(--text);}
+.drawer-links a.nav-term{font-family:var(--font-mono);color:var(--accent);font-size:13px;letter-spacing:.06em;}
+.drawer-links a.active{color:var(--accent);}
+.drawer-lang{padding:16px;border-top:1px solid var(--line-soft);display:flex;flex-wrap:wrap;gap:4px;}
+.drawer-lang button{font-family:var(--font-mono);font-size:12px;padding:5px 9px;border:1px solid var(--line);border-radius:5px;cursor:pointer;background:transparent;color:var(--muted);transition:.18s;}
+.drawer-lang button.on{background:var(--accent-soft);color:var(--accent);border-color:var(--accent-soft);}
+
+/* layout */
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;position:relative;z-index:1;}
+.eyebrow{font-family:var(--font-mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:12px;margin-bottom:18px;}
+.eyebrow::before{content:"";width:26px;height:1px;background:var(--accent);}
+h2{font-family:var(--font-display);font-weight:400;font-size:clamp(26px,3.8vw,38px);letter-spacing:-.01em;margin-bottom:16px;}
+.lead{font-size:17px;color:var(--text-soft);max-width:700px;}
+.note{padding:16px 20px;border-left:2px solid var(--accent);background:var(--accent-soft);border-radius:0 8px 8px 0;font-size:14px;color:var(--text-soft);}
+.note b{color:var(--text);}
+.btn{display:inline-flex;align-items:center;border-radius:9px;font-size:15px;font-weight:500;padding:13px 24px;transition:.22s;cursor:pointer;border:1px solid transparent;}
+.btn-primary{background:var(--accent);color:#14110C;}
+html[data-theme="light"] .btn-primary{color:#FFF8F0;}
+.btn-primary:hover{filter:brightness(1.08);transform:translateY(-1px);}
+.btn-ghost{border-color:var(--line);color:var(--text-soft);}
+.btn-ghost:hover{border-color:var(--muted);color:var(--text);}
+
+/* page hero */
+.page-hero{padding:80px 0 64px;border-bottom:1px solid var(--line-soft);}
+.breadcrumb{font-family:var(--font-mono);font-size:12.5px;color:var(--muted);letter-spacing:.1em;display:flex;align-items:center;gap:8px;margin-bottom:28px;}
+.breadcrumb a{color:var(--muted);transition:color .2s;}
+.breadcrumb a:hover{color:var(--accent);}
+.breadcrumb span{color:var(--line);}
+.page-hero h1{font-family:var(--font-display);font-weight:400;font-size:clamp(32px,4.8vw,52px);letter-spacing:-.015em;line-height:1.1;margin-bottom:24px;}
+.page-hero h1 em{font-style:italic;color:var(--accent);}
+
+/* library meta */
+.lib-meta{margin-top:32px;display:flex;gap:32px;flex-wrap:wrap;}
+.lib-stat{font-family:var(--font-mono);font-size:13px;color:var(--muted);}
+.lib-stat strong{color:var(--accent);font-size:20px;font-weight:400;display:block;margin-bottom:2px;}
+
+/* case list (index) */
+section.case-index{padding:60px 0 0;}
+.case-card-link{display:block;text-decoration:none;border-top:1px solid var(--line-soft);transition:background .2s;}
+.case-card-link:last-child{border-bottom:1px solid var(--line-soft);}
+.case-card-link:hover{background:var(--surface);}
+.case-card{display:grid;grid-template-columns:100px 1fr auto;gap:24px;padding:32px 0;align-items:start;}
+.case-num{font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;color:var(--muted);}
+.case-meta{}
+.case-id{font-family:var(--font-mono);font-size:11.5px;color:var(--accent);margin-bottom:6px;letter-spacing:.08em;}
+.case-title{font-family:var(--font-display);font-weight:400;font-size:20px;margin-bottom:8px;color:var(--text);}
+.case-tags{display:flex;gap:8px;flex-wrap:wrap;}
+.case-tag{font-family:var(--font-mono);font-size:11.5px;color:var(--muted);border:1px solid var(--line-soft);border-radius:4px;padding:3px 9px;}
+.case-arrow{color:var(--muted);font-size:18px;padding-top:4px;}
+@media(max-width:640px){.case-card{grid-template-columns:1fr;gap:12px;}.case-arrow{display:none;}}
+
+/* ── single case ──────────────────────────────────────────── */
+section.case-detail{padding:72px 0;border-bottom:1px solid var(--line-soft);}
+
+/* case header block */
+.case-header{margin-bottom:52px;}
+.case-header-id{font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;color:var(--accent);margin-bottom:16px;}
+.case-header h2{font-family:var(--font-display);font-size:clamp(28px,4vw,42px);font-weight:400;margin-bottom:20px;letter-spacing:-.01em;}
+.case-header .case-intro{font-size:17px;color:var(--text-soft);max-width:720px;line-height:1.75;}
+
+/* metadata table */
+.case-meta-table{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--line-soft);border-radius:12px;overflow:hidden;margin:36px 0;}
+.meta-cell{padding:20px;border-right:1px solid var(--line-soft);}
+.meta-cell:last-child{border-right:none;}
+.meta-cell-label{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.meta-cell-val{font-family:var(--font-mono);font-size:14px;color:var(--text);}
+.meta-cell-val.accent{color:var(--accent);}
+@media(max-width:720px){.case-meta-table{grid-template-columns:repeat(2,1fr);}.meta-cell:nth-child(2){border-right:none;}.meta-cell:nth-child(3){border-top:1px solid var(--line-soft);}}
+@media(max-width:400px){.case-meta-table{grid-template-columns:1fr;}.meta-cell{border-right:none;border-top:1px solid var(--line-soft);}.meta-cell:first-child{border-top:none;}}
+
+/* compensation chain visual */
+.chain-section{margin:48px 0;}
+.chain-section-title{font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:24px;display:flex;align-items:center;gap:12px;}
+.chain-section-title::before{content:"";width:26px;height:1px;background:var(--accent);}
+.chain-flow{display:flex;flex-direction:column;gap:0;}
+.chain-item{display:grid;grid-template-columns:200px 1fr;border-top:1px solid var(--line-soft);}
+.chain-item:last-child{border-bottom:1px solid var(--line-soft);}
+.chain-level{padding:24px;border-right:1px solid var(--line-soft);display:flex;align-items:flex-start;gap:12px;}
+.chain-level-arrow{font-family:var(--font-mono);font-size:12px;color:var(--accent);flex:none;padding-top:2px;}
+.chain-level-name{font-family:var(--font-mono);font-size:12.5px;color:var(--text-soft);letter-spacing:.04em;line-height:1.5;}
+.chain-finding{padding:24px;font-size:14.5px;color:var(--text-soft);line-height:1.7;}
+.chain-finding strong{color:var(--text);font-weight:600;}
+.chain-item.primary .chain-level{background:var(--accent-soft);}
+.chain-item.primary .chain-level-name{color:var(--accent);}
+.chain-item.primary .chain-level-arrow{color:var(--accent);}
+@media(max-width:640px){.chain-item{grid-template-columns:1fr;}.chain-level{border-right:none;padding-bottom:4px;}.chain-finding{padding-top:6px;}}
+
+/* imaging gallery */
+.imaging-section{margin:48px 0;}
+.imaging-title{font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:24px;display:flex;align-items:center;gap:12px;}
+.imaging-title::before{content:"";width:26px;height:1px;background:var(--accent);}
+
+/* group layout: label + images */
+.imaging-group{margin-bottom:40px;}
+.imaging-group-label{font-family:var(--font-mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--line-soft);}
+.img-grid{display:grid;gap:12px;}
+.img-grid.g1{grid-template-columns:1fr;}
+.img-grid.g2{grid-template-columns:repeat(2,1fr);}
+.img-grid.g3{grid-template-columns:repeat(3,1fr);}
+@media(max-width:700px){.img-grid.g2,.img-grid.g3{grid-template-columns:1fr;}}
+
+.img-frame{background:var(--img-bg);border:1px solid var(--line-soft);border-radius:10px;overflow:hidden;position:relative;}
+.img-frame img{width:100%;height:auto;display:block;opacity:.92;transition:opacity .25s;}
+.img-frame:hover img{opacity:1;}
+.img-caption{padding:10px 14px;background:var(--surface);border-top:1px solid var(--line-soft);}
+.img-caption-code{font-family:var(--font-mono);font-size:11px;color:var(--accent);display:block;margin-bottom:2px;letter-spacing:.06em;}
+.img-caption-text{font-size:13px;color:var(--muted);line-height:1.45;}
+/* highlight badge for key measurement */
+.img-badge{position:absolute;top:10px;right:10px;background:var(--accent);color:#14110C;font-family:var(--font-mono);font-size:12px;font-weight:600;padding:4px 10px;border-radius:5px;}
+
+/* lightbox */
+.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:200;align-items:center;justify-content:center;cursor:zoom-out;}
+.lightbox.open{display:flex;}
+.lightbox img{max-width:90vw;max-height:88vh;object-fit:contain;border-radius:4px;}
+.lightbox-close{position:absolute;top:20px;right:24px;background:transparent;border:none;color:#fff;font-size:28px;cursor:pointer;opacity:.7;transition:opacity .2s;}
+.lightbox-close:hover{opacity:1;}
+.lightbox-caption{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);font-family:var(--font-mono);font-size:13px;color:rgba(255,255,255,.5);white-space:nowrap;}
+
+/* narrative sections */
+.narrative{margin:40px 0;}
+.narrative p{font-size:15.5px;color:var(--text-soft);line-height:1.8;max-width:740px;margin-bottom:14px;}
+.narrative p:last-child{margin-bottom:0;}
+.narrative strong{color:var(--text);}
+
+/* observation status */
+.obs-status{margin:36px 0;display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.obs-status-item{background:var(--surface);border:1px solid var(--line-soft);border-radius:10px;padding:20px;}
+.obs-status-label{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.obs-status-val{font-size:15px;color:var(--text-soft);line-height:1.5;}
+.obs-status-val strong{color:var(--text);}
+@media(max-width:620px){.obs-status{grid-template-columns:1fr;}}
+
+/* disclaimer */
+.case-disc{margin-top:48px;}
+
+/* more cases placeholder */
+section.more-cases{padding:64px 0;}
+.more-cases-inner{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;}
+.more-cases-copy h2{font-family:var(--font-display);font-weight:400;font-size:clamp(22px,3vw,30px);margin-bottom:8px;}
+.more-cases-copy p{font-size:15px;color:var(--muted);max-width:480px;}
+
+/* cta */
+.cta-strip{padding:64px 0;background:var(--bg-soft);}
+.cta-inner{display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap;}
+.cta-copy h2{font-family:var(--font-display);font-weight:400;font-size:clamp(22px,3.2vw,32px);margin-bottom:10px;}
+.cta-copy p{font-size:16px;color:var(--text-soft);max-width:520px;}
+
+/* footer */
+footer{border-top:1px solid var(--line-soft);padding:44px 0 52px;background:var(--bg-soft);}
+.foot-grid{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;}
+.foot-left p{font-size:14px;color:var(--muted);}
+.foot-left p:first-child{color:var(--text-soft);font-weight:500;margin-bottom:4px;}
+.foot-right{font-family:var(--font-mono);font-size:12.5px;color:var(--muted);text-align:right;line-height:2.2;}
+.foot-email a{color:var(--muted);transition:color .2s;}
+.foot-email a:hover{color:var(--text);}
+@media(max-width:680px){.foot-right{text-align:left;}}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .65s ease,transform .65s ease;}
+.reveal.in{opacity:1;transform:none;}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none;}html{scroll-behavior:auto;}}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px;}
+
+/* RTL */
+html[dir="rtl"] .eyebrow,.chain-section-title,.imaging-title{flex-direction:row-reverse;}
+html[dir="rtl"] .eyebrow::before,.chain-section-title::before,.imaging-title::before{order:1;}
+html[dir="rtl"] .note{border-left:none;border-right:2px solid var(--accent);border-radius:8px 0 0 8px;}
+html[dir="rtl"] .chain-level{border-right:none;border-left:1px solid var(--line-soft);}
+html[dir="rtl"] .spine{left:auto;right:34px;}
+
+@media(max-width:600px){section.case-detail,.case-index{padding:52px 0 0;}.wrap{padding:0 16px;}.page-hero{padding:48px 0 44px;}}
+</style>
+</head>
+<body>
+<div class="spine" aria-hidden="true"></div>
+
+<header>
+  <div class="header-in">
+    <a class="logo" href="index.html" aria-label="PRIMORDIS home">
+      <span class="logo-mark" aria-hidden="true"></span>
+      <span class="logo-word">PRIMORDIS</span>
+    </a>
+    <nav class="main" aria-label="Main navigation">
+      <a href="index.html"          data-i18n="nav_home"></a>
+      <a href="framework.html"      data-i18n="nav_framework"></a>
+      <a href="assessment.html"     data-i18n="nav_assessment"></a>
+      <a href="cases.html"          data-i18n="nav_cases" class="active"></a>
+      <a href="research.html"       data-i18n="nav_research"></a>
+      <a href="primordocciput.html" class="nav-term" data-i18n="nav_primordocciput"></a>
+      <a href="atlas.html"          data-i18n="nav_atlas"></a>
+      <a href="anthroponomy.html"   data-i18n="nav_anthroponomy"></a>
+    </nav>
+    <div class="controls">
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang="en">EN</button><button type="button" data-lang="de">DE</button>
+        <button type="button" data-lang="ru">RU</button><button type="button" data-lang="es">ES</button>
+        <button type="button" data-lang="fr">FR</button><button type="button" data-lang="ar">AR</button>
+        <button type="button" data-lang="zh">中文</button><button type="button" data-lang="ja">日本語</button>
+        <button type="button" data-lang="ko">한국어</button><button type="button" data-lang="et">ET</button>
+        <button type="button" data-lang="lv">LV</button>
+      </div>
+      <button type="button" class="theme-btn" id="themeBtn" aria-label="Toggle theme">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" id="themeIcon">
+          <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
+        </svg>
+      </button>
+      <button type="button" class="burger-btn" id="burgerBtn" aria-label="Open navigation" aria-expanded="false">
+        <svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <line x1="0" y1="1" x2="18" y2="1"/><line x1="0" y1="7" x2="18" y2="7"/><line x1="0" y1="13" x2="18" y2="13"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="drawerOverlay" class="drawer-overlay"></div>
+<nav id="mobileDrawer" class="mobile-drawer" aria-hidden="true">
+  <div class="drawer-header">
+    <span class="drawer-title">PRIMORDIS</span>
+    <button type="button" id="drawerClose"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="2" y1="2" x2="14" y2="14"/><line x1="14" y1="2" x2="2" y2="14"/></svg></button>
+  </div>
+  <div class="drawer-links">
+    <a href="index.html" data-i18n="nav_home"></a>
+    <a href="framework.html" data-i18n="nav_framework"></a>
+    <a href="assessment.html" data-i18n="nav_assessment"></a>
+    <a href="cases.html" data-i18n="nav_cases" class="active"></a>
+    <a href="research.html" data-i18n="nav_research"></a>
+    <a href="primordocciput.html" class="nav-term" data-i18n="nav_primordocciput"></a>
+    <a href="atlas.html" data-i18n="nav_atlas"></a>
+    <a href="anthroponomy.html" data-i18n="nav_anthroponomy"></a>
+  </div>
+  <div class="drawer-lang">
+    <button type="button" data-lang="en">EN</button><button type="button" data-lang="de">DE</button>
+    <button type="button" data-lang="ru">RU</button><button type="button" data-lang="es">ES</button>
+    <button type="button" data-lang="fr">FR</button><button type="button" data-lang="ar">AR</button>
+    <button type="button" data-lang="zh">中文</button><button type="button" data-lang="ja">日本語</button>
+    <button type="button" data-lang="ko">한국어</button><button type="button" data-lang="et">ET</button>
+    <button type="button" data-lang="lv">LV</button>
+  </div>
+</nav>
+
+<!-- lightbox -->
+<div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+  <button class="lightbox-close" id="lbClose" aria-label="Close">×</button>
+  <img id="lbImg" src="" alt="">
+  <div class="lightbox-caption" id="lbCaption"></div>
+</div>
+
+<main>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="wrap">
+    <div class="breadcrumb">
+      <a href="index.html">PRIMORDIS</a><span>/</span><span data-i18n="nav_cases"></span>
+    </div>
+    <h1 data-i18n="h_title"></h1>
+    <p class="lead" data-i18n="h_lead"></p>
+    <div class="lib-meta">
+      <div class="lib-stat"><strong data-i18n="stat1_n"></strong><span data-i18n="stat1_l"></span></div>
+      <div class="lib-stat"><strong data-i18n="stat2_n"></strong><span data-i18n="stat2_l"></span></div>
+      <div class="lib-stat"><strong data-i18n="stat3_n"></strong><span data-i18n="stat3_l"></span></div>
+    </div>
+  </div>
+</div>
+
+<!-- CASE INDEX -->
+<section class="case-index">
+  <div class="wrap reveal">
+    <div class="eyebrow" data-i18n="idx_eyebrow"></div>
+    <a href="#case-001" class="case-card-link">
+      <div class="case-card">
+        <div class="case-num">001</div>
+        <div class="case-meta">
+          <div class="case-id">PRIMORDIS-CASE-001</div>
+          <div class="case-title" data-i18n="c1_title"></div>
+          <div class="case-tags">
+            <span class="case-tag" data-i18n="c1_tag1"></span>
+            <span class="case-tag" data-i18n="c1_tag2"></span>
+            <span class="case-tag" data-i18n="c1_tag3"></span>
+          </div>
+        </div>
+        <div class="case-arrow">↓</div>
+      </div>
+    </a>
+    <div class="note" style="margin-top:0;border-top:1px solid var(--line-soft);border-radius:0 0 8px 8px;" data-i18n="idx_note"></div>
+  </div>
+</section>
+
+<!-- CASE 001 DETAIL -->
+<section class="case-detail reveal" id="case-001">
+  <div class="wrap">
+
+    <!-- case header -->
+    <div class="case-header">
+      <div class="case-header-id">PRIMORDIS-CASE-001 · <span data-i18n="c1_date"></span></div>
+      <h2 data-i18n="c1_title"></h2>
+      <p class="case-intro" data-i18n="c1_intro"></p>
+      <div class="case-meta-table">
+        <div class="meta-cell"><div class="meta-cell-label" data-i18n="mt_profile"></div><div class="meta-cell-val" data-i18n="c1_profile"></div></div>
+        <div class="meta-cell"><div class="meta-cell-label">PSI</div><div class="meta-cell-val accent">+6 R</div></div>
+        <div class="meta-cell"><div class="meta-cell-label">DL</div><div class="meta-cell-val accent">5 / 7</div></div>
+        <div class="meta-cell"><div class="meta-cell-label" data-i18n="mt_duration"></div><div class="meta-cell-val" data-i18n="c1_duration"></div></div>
+      </div>
+    </div>
+
+    <!-- compensation chain -->
+    <div class="chain-section">
+      <div class="chain-section-title" data-i18n="chain_title"></div>
+      <div class="chain-flow">
+        <div class="chain-item primary">
+          <div class="chain-level"><div class="chain-level-arrow">◉</div><div class="chain-level-name">PRIMORDOCCIPUT<br>C0</div></div>
+          <div class="chain-finding" data-i18n="ch0"></div>
+        </div>
+        <div class="chain-item">
+          <div class="chain-level"><div class="chain-level-arrow">↓</div><div class="chain-level-name" data-i18n="ch1_level"></div></div>
+          <div class="chain-finding" data-i18n="ch1"></div>
+        </div>
+        <div class="chain-item">
+          <div class="chain-level"><div class="chain-level-arrow">↓</div><div class="chain-level-name" data-i18n="ch2_level"></div></div>
+          <div class="chain-finding" data-i18n="ch2"></div>
+        </div>
+        <div class="chain-item">
+          <div class="chain-level"><div class="chain-level-arrow">↓</div><div class="chain-level-name" data-i18n="ch3_level"></div></div>
+          <div class="chain-finding" data-i18n="ch3"></div>
+        </div>
+        <div class="chain-item">
+          <div class="chain-level"><div class="chain-level-arrow">↓</div><div class="chain-level-name" data-i18n="ch4_level"></div></div>
+          <div class="chain-finding" data-i18n="ch4"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- imaging -->
+    <div class="imaging-section">
+      <div class="imaging-title" data-i18n="img_title"></div>
+
+      <!-- Group 1: C0 axial -->
+      <div class="imaging-group">
+        <div class="imaging-group-label" data-i18n="img_g1"></div>
+        <div class="img-grid g2">
+          <div class="img-frame" data-lb-src="img/c01.jpg" data-lb-cap="C0 axial CT — right condylar displacement">
+            <img src="img/c01.jpg" alt="C0 axial CT showing atlanto-occipital displacement" loading="lazy">
+            <div class="img-caption">
+              <span class="img-caption-code">CT · AXIAL · C0</span>
+              <span class="img-caption-text" data-i18n="img_c01"></span>
+            </div>
+          </div>
+          <div class="img-frame" data-lb-src="img/c02.jpg" data-lb-cap="C0 axial CT — annotation overlay">
+            <img src="img/c02.jpg" alt="C0 axial CT with annotation" loading="lazy">
+            <div class="img-caption">
+              <span class="img-caption-code">CT · AXIAL · C0</span>
+              <span class="img-caption-text" data-i18n="img_c02"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Group 2: Cranio-cervical -->
+      <div class="imaging-group">
+        <div class="imaging-group-label" data-i18n="img_g2"></div>
+        <div class="img-grid g3">
+          <div class="img-frame" data-lb-src="img/c03.jpg" data-lb-cap="Cranio-cervical — frontal CT reconstruction">
+            <img src="img/c03.jpg" alt="Frontal CT reconstruction cranio-cervical" loading="lazy">
+            <div class="img-caption">
+              <span class="img-caption-code">CT · FRONTAL · C0–C3</span>
+              <span class="img-caption-text" data-i18n="img_c03"></span>
+            </div>
+          </div>
+          <div class="img-frame" data-lb-src="img/c04.jpg" data-lb-cap="Skull base — frontal X-ray">
+            <img src="img/c04.jpg" alt="Skull base frontal X-ray" loading="lazy">
+            <div class="img-caption">
+              <span class="img-caption-code">X-RAY · FRONTAL · SKULL BASE</span>
+              <span class="img-caption-text" data-i18n="img_c04"></span>
+            </div>
+          </div>
+          <div class="img-frame" data-lb-src="img/c06.jpg" data-lb-cap="C0–C1–C2 sagittal CT detail">
+            <img src="img/c06.jpg" alt="C0-C1-C2 sagittal CT" loading="lazy">
+            <div class="img-caption">
+              <span class="img-caption-code">CT · SAGITTAL · C0–C2</span>
+              <span class="img-caption-text" data-i18n="img_c06"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Group 3: Angular measurement — key image -->
+      <div class="imaging-group">
+        <div class="imaging-group-label" data-i18n="img_g3"></div>
+        <div class="img-grid g2">
+          <div class="img-frame" data-lb-src="img/c05.jpg" data-lb-cap="Lateral cervical CT — forward head posture">
+            <img src="img/c05.jpg" alt="Lateral cervical CT" loading="lazy">
+            <div class="img-caption">
+              <span class="img-caption-code">CT · LATERAL · CERVICAL</span>
+              <span class="img-caption-text" data-i18n="img_c05"></span>
+            </div>
+          </div>
+          <div class="img-frame" data-lb-src="img/c07.jpg" data-lb-cap="12.75° angular deviation — cranio-cervical junction">
+            <img src="img/c07.jpg" alt="Angular measurement 12.75 degrees" loading="lazy">
+            <div class="img-badge">12.75°</div>
+            <div class="img-caption">
+              <span class="img-caption-code">X-RAY · LATERAL · ANGULAR MEASURE</span>
+              <span class="img-caption-text" data-i18n="img_c07"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Group 4: Thoracic compensation -->
+      <div class="imaging-group">
+        <div class="imaging-group-label" data-i18n="img_g4"></div>
+        <div class="img-grid g2">
+          <div class="img-frame" data-lb-src="img/c08.jpg" data-lb-cap="Thoracic — frontal X-ray, scoliotic compensation arc">
+            <img src="img/c08.jpg" alt="Frontal chest X-ray scoliotic arc" loading="lazy">
+            <div class="img-caption">
+              <span class="img-caption-code">X-RAY · FRONTAL · THORACIC</span>
+              <span class="img-caption-text" data-i18n="img_c08"></span>
+            </div>
+          </div>
+          <div class="img-frame" data-lb-src="img/c09.jpg" data-lb-cap="Thoracolumbar kyphosis — lateral X-ray">
+            <img src="img/c09.jpg" alt="Thoracolumbar lateral X-ray kyphosis" loading="lazy">
+            <div class="img-caption">
+              <span class="img-caption-code">X-RAY · LATERAL · THORACOLUMBAR</span>
+              <span class="img-caption-text" data-i18n="img_c09"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- narrative -->
+    <div class="narrative">
+      <div class="chain-section-title" data-i18n="narr_title"></div>
+      <p data-i18n="narr_p1"></p>
+      <p data-i18n="narr_p2"></p>
+      <p data-i18n="narr_p3"></p>
+    </div>
+
+    <!-- observation status -->
+    <div class="obs-status">
+      <div class="obs-status-item">
+        <div class="obs-status-label" data-i18n="obs_symp"></div>
+        <div class="obs-status-val" data-i18n="obs_symp_v"></div>
+      </div>
+      <div class="obs-status-item">
+        <div class="obs-status-label" data-i18n="obs_nav"></div>
+        <div class="obs-status-val" data-i18n="obs_nav_v"></div>
+      </div>
+      <div class="obs-status-item">
+        <div class="obs-status-label" data-i18n="obs_open"></div>
+        <div class="obs-status-val" data-i18n="obs_open_v"></div>
+      </div>
+    </div>
+
+    <div class="case-disc">
+      <div class="note" data-i18n="case_disc"></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- MORE CASES -->
+<section class="more-cases">
+  <div class="wrap more-cases-inner reveal">
+    <div class="more-cases-copy">
+      <h2 data-i18n="more_title"></h2>
+      <p data-i18n="more_lead"></p>
+    </div>
+    <a class="btn btn-ghost" href="research.html" data-i18n="more_btn"></a>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-strip">
+  <div class="wrap cta-inner">
+    <div class="cta-copy">
+      <h2 data-i18n="cta_title"></h2>
+      <p data-i18n="cta_lead"></p>
+    </div>
+    <div style="display:flex;gap:14px;flex-wrap:wrap;">
+      <a class="btn btn-primary" href="mailto:info@primordis.org" data-i18n="cta_btn1"></a>
+      <a class="btn btn-ghost" href="assessment.html" data-i18n="cta_btn2"></a>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <div class="wrap foot-grid">
+    <div class="foot-left">
+      <p>PRIMORDIS — Human Configuration Navigation Platform.</p>
+      <p data-i18n="f_line2"></p>
+    </div>
+    <div class="foot-right">
+      <div class="foot-email"><a href="mailto:info@primordis.org">info@primordis.org</a></div>
+      <div data-i18n="f_disc"></div>
+      <div data-i18n="f_rights"></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const I18N = {
+en:{
+  nav_home:"Home",nav_framework:"Framework",nav_assessment:"Assessment",
+  nav_cases:"Cases",nav_research:"Research",nav_primordocciput:"PRIMORDOCCIPUT",
+  nav_atlas:"Atlas",nav_anthroponomy:"Anthroponomy",
+  h_title:"The <em>Case</em> Library.",
+  h_lead:"Structured observational records from the PRIMORDIS clinical archive. Each case documents configuration pattern, compensation chain, timeline and follow-up — organized for comparison, not persuasion.",
+  stat1_n:"6,000+",stat1_l:"documented cases in archive",
+  stat2_n:"20+",stat2_l:"years of observation",
+  stat3_n:"1",stat3_l:"case published here",
+  idx_eyebrow:"Index",
+  c1_title:"Full-spine compensation chain from C0 displacement",
+  c1_tag1:"C0 primary",c1_tag2:"PSI +6 R",c1_tag3:"DL 5/7",
+  idx_note:"<b>Note:</b> cases are anonymised observational records. They illustrate the framework; they do not prove efficacy. All imaging is presented with patient consent for educational purposes.",
+  c1_date:"observation ongoing",
+  c1_intro:"A case demonstrating the full downward propagation of a compensation chain initiated at the atlanto-occipital junction. The primary displacement at C0 is documented on CT; its consequences are readable across the entire spinal column on plain X-ray.",
+  mt_profile:"Profile",mt_duration:"Chronicity",
+  c1_profile:"Adult, non-specific",c1_duration:"Chronic, DL 5",
+  chain_title:"Compensation chain",
+  ch0:"<strong>Primary displacement point.</strong> Right-dominant asymmetry at the atlanto-occipital joint (C0). The occipital condyle is displaced relative to the atlas, initiating a right-lateral tilt of the cranial base. This is the origin point of the entire compensation architecture below.",
+  ch1_level:"C0–C3\nCranio-cervical",ch1:"<strong>Angular deviation: 12.75°</strong> at the cranio-cervical junction, measured on lateral imaging. Forward head posture documented on lateral CT. The cervical spine compensates by increasing lordosis in the mid-cervical region and restricting rotation.",
+  ch2_level:"C3–C7\nLower cervical",ch2:"Compensatory counter-rotation in the lower cervical spine. Unilateral muscle hypertonicity — right sternocleidomastoid and scalene complex — documented clinically. The body is maintaining head-level orientation through active muscular compensation.",
+  ch3_level:"T1–T12\nThoracic",ch3:"<strong>Scoliotic compensation arc</strong> visible on frontal chest X-ray. The thoracic spine curves to the left, counterbalancing the right-dominant displacement above. Rib cage asymmetry follows — right side elevated, left depressed. Breathing mechanics affected.",
+  ch4_level:"T12–L5\nThoracolumbar",ch4:"<strong>Thoracolumbar kyphosis</strong> on lateral X-ray. Loss of lumbar lordosis as the spine absorbs the thoracic compensation. Posterior load concentration at L4–L5 level. Lower limb load asymmetry expected but not imaged in this series.",
+  img_title:"Imaging documentation",
+  img_g1:"Group 1 — C0 primary displacement (axial CT)",
+  img_g2:"Group 2 — Cranio-cervical junction",
+  img_g3:"Group 3 — Lateral axis and angular measurement",
+  img_g4:"Group 4 — Thoracic and thoracolumbar compensation",
+  img_c01:"Axial CT at C0 level. The atlanto-occipital joint surfaces show asymmetric contact — right condylar displacement is the primary finding.",
+  img_c02:"Same level, annotation overlay. The asymmetry of the joint space is the operative finding.",
+  img_c03:"Frontal CT reconstruction C0–C3. Lateral tilt of the cranial base relative to C1 ring is visible.",
+  img_c04:"Frontal skull base X-ray. Orbital asymmetry and cranial base tilt consistent with C0 configuration.",
+  img_c05:"Lateral cervical CT. Forward head posture: the head is displaced anterior to the body's vertical axis.",
+  img_c06:"Sagittal CT detail C0–C2. C0–C1 joint orientation and C1–C2 relationship documented.",
+  img_c07:"Angular measurement at the cranio-cervical junction: 12.75° deviation from horizontal reference. Yellow line: horizontal reference. Red dashed line: actual cranial base angle.",
+  img_c08:"Frontal chest X-ray. Scoliotic arc of the thoracic spine curving left — compensation for the right-dominant C0 displacement above.",
+  img_c09:"Lateral thoracolumbar X-ray. Increased kyphosis with loss of lumbar lordosis — downstream consequence of the thoracic compensation.",
+  narr_title:"Reading the archive",
+  narr_p1:"This case illustrates what the PRIMORDIS framework calls the compensation archive: the accumulated structural record of how the body has maintained equilibrium despite a primary displacement it cannot self-correct.",
+  narr_p2:"The 12.75° deviation at the cranio-cervical junction is not the whole story — it is the measurement of the primary event. Everything below it — the scoliotic arc, the thoracolumbar kyphosis, the rib asymmetry — is the body's answer to that primary event. Each structure is doing its job. None of them is malfunctioning.",
+  narr_p3:"The clinical question this case poses is not 'which of these findings should we treat?' It is: 'if the primary displacement at C0 were addressed, which of the downstream compensations would the body choose to release on its own?'",
+  obs_symp:"Presenting symptoms",obs_symp_v:"Cervicogenic headache, right-sided. Chronic cervical tension. Interscapular load. Reported cognitive fatigue.",
+  obs_nav:"Navigation status",obs_nav_v:"<strong>In progress.</strong> Initial assessment completed. Priority: C0 configuration. Cascade observation underway.",
+  obs_open:"Open observations",obs_open_v:"Thoracic load response post-intervention. Lumbar trajectory. State parameter changes — in tracking.",
+  case_disc:"<b>Observational record.</b> This case documents a configuration and its compensation chain. It is not a treatment outcome report. All findings are observations, not diagnoses. This record does not constitute medical advice.",
+  more_title:"6,000+ cases in the archive.",
+  more_lead:"The full case library is the empirical base of the PRIMORDIS research program. Cases are in preparation for structured publication.",
+  more_btn:"→ Research program",
+  cta_title:"Begin your own assessment.",
+  cta_lead:"Every case in this library began with a first assessment. The configuration map is the starting point of navigation.",
+  cta_btn1:"Request assessment",cta_btn2:"How assessment works",
+  f_line2:"Part of the emerging discipline of Anthroponomy.",
+  f_disc:"Educational and research content. Not medical advice.",
+  f_rights:"© 2026 PRIMORDIS. Observational records. All imaging published with consent."
+},
+de:{
+  nav_home:"Start",nav_framework:"Framework",nav_assessment:"Erfassung",
+  nav_cases:"Fälle",nav_research:"Forschung",nav_primordocciput:"PRIMORDOCCIPUT",
+  nav_atlas:"Atlas",nav_anthroponomy:"Anthroponomie",
+  h_title:"Die <em>Fallbibliothek</em>.",
+  h_lead:"Strukturierte Beobachtungsaufzeichnungen aus dem klinischen PRIMORDIS-Archiv. Jeder Fall dokumentiert Konfigurationsmuster, Kompensationskette, Zeitverlauf und Katamnese — für Vergleich, nicht für Überzeugung.",
+  stat1_n:"6.000+",stat1_l:"dokumentierte Fälle im Archiv",
+  stat2_n:"20+",stat2_l:"Jahre Beobachtung",
+  stat3_n:"1",stat3_l:"hier veröffentlichter Fall",
+  idx_eyebrow:"Index",
+  c1_title:"Ganzkörper-Kompensationskette durch C0-Verschiebung",
+  c1_tag1:"C0 primär",c1_tag2:"PSI +6 R",c1_tag3:"DL 5/7",
+  idx_note:"<b>Hinweis:</b> Fälle sind anonymisierte Beobachtungsaufzeichnungen. Sie illustrieren das Framework; sie beweisen keine Wirksamkeit. Alle Bildgebung wird mit Patienteneinwilligung zu Bildungszwecken präsentiert.",
+  c1_date:"Beobachtung laufend",
+  c1_intro:"Ein Fall, der die vollständige Abwärtspropagation einer am atlanto-okzipitalen Übergang initiierten Kompensationskette demonstriert. Die primäre Verschiebung an C0 ist im CT dokumentiert; ihre Konsequenzen sind über die gesamte Wirbelsäule im Röntgenbild ablesbar.",
+  mt_profile:"Profil",mt_duration:"Chronizität",
+  c1_profile:"Erwachsen, unspezifisch",c1_duration:"Chronisch, DL 5",
+  chain_title:"Kompensationskette",
+  ch0:"<strong>Primärer Verschiebungspunkt.</strong> Rechtsdominante Asymmetrie am atlanto-okzipitalen Gelenk (C0). Der Hinterhauptskondylus ist relativ zum Atlas verschoben und initiiert eine rechts-laterale Kippung der Schädelbasis.",
+  ch1_level:"C0–C3\nKraniozervikaler Übergang",ch1:"<strong>Winkelabweichung: 12,75°</strong> am kraniozervikalen Übergang, gemessen an der lateralen Bildgebung. Vorwärtsverlagerung des Kopfes im lateralen CT dokumentiert.",
+  ch2_level:"C3–C7\nUntere HWS",ch2:"Kompensatorische Gegenrotation in der unteren Halswirbelsäule. Einseitige Muskelhypertonie klinisch dokumentiert. Der Körper erhält die Kopfhorizontale durch aktive muskuläre Kompensation.",
+  ch3_level:"T1–T12\nBrustwirbelbereich",ch3:"<strong>Skoliotischer Kompensationsbogen</strong> im frontalen Thorax-Röntgenbild sichtbar. Die Brustwirbelsäule biegt sich nach links und gleicht die rechtsdominante Verschiebung oben aus.",
+  ch4_level:"T12–L5\nThorakolumbar",ch4:"<strong>Thorakolumbale Kyphose</strong> im lateralen Röntgenbild. Verlust der Lendenlordose, da die Wirbelsäule die thorakale Kompensation absorbiert.",
+  img_title:"Bildgebungsdokumentation",
+  img_g1:"Gruppe 1 — Primäre C0-Verschiebung (axiales CT)",
+  img_g2:"Gruppe 2 — Kraniozervikaler Übergang",
+  img_g3:"Gruppe 3 — Laterale Achse und Winkelmessung",
+  img_g4:"Gruppe 4 — Thorakale und thorakolumbale Kompensation",
+  img_c01:"Axiales CT auf C0-Höhe. Die Gelenkflächen des atlanto-okzipitalen Gelenks zeigen asymmetrischen Kontakt.",
+  img_c02:"Gleiche Höhe, Annotationsüberlagerung. Die Asymmetrie des Gelenkspalts ist der operative Befund.",
+  img_c03:"Frontale CT-Rekonstruktion C0–C3. Laterale Kippung der Schädelbasis relativ zum C1-Ring sichtbar.",
+  img_c04:"Frontales Schädelbasis-Röntgenbild. Orbitale Asymmetrie und Schädelbasiskippung.",
+  img_c05:"Laterales zervikales CT. Vorwärtsverlagerung des Kopfes: anterior zur vertikalen Körperachse.",
+  img_c06:"Sagittales CT-Detail C0–C2. C0–C1-Gelenkausrichtung dokumentiert.",
+  img_c07:"Winkelmessung am kraniozervikalen Übergang: 12,75° Abweichung von der Horizontalreferenz.",
+  img_c08:"Frontales Thorax-Röntgenbild. Skoliotischer Bogen der Brustwirbelsäule nach links.",
+  img_c09:"Laterales thorakolumbales Röntgenbild. Verstärkte Kyphose mit Verlust der Lendenlordose.",
+  narr_title:"Das Archiv lesen",
+  narr_p1:"Dieser Fall illustriert, was das PRIMORDIS-Framework als Kompensationsarchiv bezeichnet: die akkumulierte strukturelle Aufzeichnung, wie der Körper das Gleichgewicht trotz einer primären Verschiebung aufrechterhalten hat.",
+  narr_p2:"Die 12,75°-Abweichung ist nicht die ganze Geschichte — sie ist die Messung des primären Ereignisses. Alles darunter ist die Antwort des Körpers darauf.",
+  narr_p3:"Die klinische Frage dieses Falls ist nicht 'Welchen dieser Befunde sollen wir behandeln?' Sondern: 'Wenn die primäre Verschiebung an C0 adressiert würde, welche nachgelagerten Kompensationen würde der Körper selbst freigeben?'",
+  obs_symp:"Vorstellende Symptome",obs_symp_v:"Zervikogener Kopfschmerz, rechtsseitig. Chronische zervikale Spannung. Interskapuläre Last. Kognitive Erschöpfung.",
+  obs_nav:"Navigationsstatus",obs_nav_v:"<strong>Laufend.</strong> Ersterfassung abgeschlossen. Priorität: C0-Konfiguration. Kaskadenbeobachtung im Gang.",
+  obs_open:"Offene Beobachtungen",obs_open_v:"Thorakale Lastreaktion nach Intervention. Lumbale Trajektorie. Zustandsparameter-Veränderungen — in Verfolgung.",
+  case_disc:"<b>Beobachtungsaufzeichnung.</b> Dieser Fall dokumentiert eine Konfiguration und ihre Kompensationskette. Er ist kein Behandlungsergebnisbericht. Alle Befunde sind Beobachtungen, keine Diagnosen.",
+  more_title:"6.000+ Fälle im Archiv.",
+  more_lead:"Die vollständige Fallbibliothek ist die empirische Basis des PRIMORDIS-Forschungsprogramms. Fälle werden für strukturierte Veröffentlichung vorbereitet.",
+  more_btn:"→ Forschungsprogramm",
+  cta_title:"Beginnen Sie Ihre eigene Erfassung.",
+  cta_lead:"Jeder Fall in dieser Bibliothek begann mit einer ersten Erfassung.",
+  cta_btn1:"Erfassung anfragen",cta_btn2:"Wie Erfassung funktioniert",
+  f_line2:"Teil der entstehenden Disziplin der Anthroponomie.",
+  f_disc:"Bildungs- und Forschungsinhalte. Keine medizinische Beratung.",
+  f_rights:"© 2026 PRIMORDIS. Beobachtungsaufzeichnungen. Bildgebung mit Einwilligung."
+},
+ru:{
+  nav_home:"Главная",nav_framework:"Подход",nav_assessment:"Оценка",
+  nav_cases:"Случаи",nav_research:"Исследования",nav_primordocciput:"PRIMORDOCCIPUT",
+  nav_atlas:"Атлас",nav_anthroponomy:"Антропономия",
+  h_title:"Библиотека <em>случаев</em>.",
+  h_lead:"Структурированные наблюдательные записи из клинического архива PRIMORDIS. Каждый случай документирует паттерн конфигурации, цепь компенсаций, таймлайн и катамнез — для сравнения, а не для убеждения.",
+  stat1_n:"6 000+",stat1_l:"документированных случаев в архиве",
+  stat2_n:"20+",stat2_l:"лет наблюдений",
+  stat3_n:"1",stat3_l:"опубликованный случай",
+  idx_eyebrow:"Индекс",
+  c1_title:"Компенсационная цепь всего позвоночника от смещения C0",
+  c1_tag1:"C0 первичный",c1_tag2:"PSI +6 R",c1_tag3:"DL 5/7",
+  idx_note:"<b>Примечание:</b> случаи — анонимизированные наблюдательные записи. Они иллюстрируют подход; не доказывают эффективность. Вся визуализация публикуется с согласия пациента в образовательных целях.",
+  c1_date:"наблюдение продолжается",
+  c1_intro:"Случай, демонстрирующий полное нисходящее распространение компенсационной цепи, инициированной на атланто-окципитальном переходе. Первичное смещение в C0 задокументировано на КТ; его последствия читаются по всему позвоночному столбу на обзорных рентгенограммах.",
+  mt_profile:"Профиль",mt_duration:"Хроничность",
+  c1_profile:"Взрослый, неспецифический",c1_duration:"Хроническое, DL 5",
+  chain_title:"Цепь компенсаций",
+  ch0:"<strong>Первичная точка смещения.</strong> Правостороннее асимметричное положение в атланто-окципитальном суставе (C0). Мыщелок затылочной кости смещён относительно атланта, инициируя правостороннее боковое наклонение основания черепа. Это точка начала всей архитектуры компенсаций ниже.",
+  ch1_level:"C0–C3\nКранио-цервикальный",ch1:"<strong>Угловое отклонение: 12,75°</strong> на кранио-цервикальном переходе, измеренное на боковой визуализации. Переднее смещение головы задокументировано на боковом КТ. Шейный отдел компенсирует усилением лордоза в средней шейной области.",
+  ch2_level:"C3–C7\nНижний шейный",ch2:"Компенсаторная контрротация в нижнем шейном отделе. Односторонняя мышечная гипертония — правые грудино-ключично-сосцевидная и лестничные мышцы — задокументирована клинически. Тело удерживает горизонталь взгляда через активную мышечную компенсацию.",
+  ch3_level:"T1–T12\nГрудной",ch3:"<strong>Сколиотическая компенсаторная дуга</strong> видна на фронтальной рентгенограмме грудной клетки. Грудной отдел позвоночника изгибается влево, уравновешивая правостороннее смещение выше. Асимметрия рёберных дуг следует закономерно. Механика дыхания нарушена.",
+  ch4_level:"T12–L5\nТоракопоясничный",ch4:"<strong>Торакопоясничный кифоз</strong> на боковой рентгенограмме. Сглаживание поясничного лордоза по мере того, как позвоночник поглощает грудную компенсацию. Концентрация задней нагрузки на уровне L4–L5.",
+  img_title:"Документация визуализации",
+  img_g1:"Группа 1 — Первичное смещение C0 (аксиальное КТ)",
+  img_g2:"Группа 2 — Кранио-цервикальный переход",
+  img_g3:"Группа 3 — Боковая ось и угловое измерение",
+  img_g4:"Группа 4 — Грудная и торакопоясничная компенсация",
+  img_c01:"Аксиальное КТ на уровне C0. Суставные поверхности атланто-окципитального сустава показывают асимметричный контакт — правостороннее смещение мыщелка.",
+  img_c02:"Тот же уровень, наложение аннотаций. Асимметрия суставной щели — оперативная находка.",
+  img_c03:"Фронтальная КТ-реконструкция C0–C3. Видно латеральное наклонение основания черепа относительно кольца C1.",
+  img_c04:"Фронтальная рентгенограмма основания черепа. Орбитальная асимметрия и наклон основания черепа, соответствующие конфигурации C0.",
+  img_c05:"Боковое КТ шейного отдела. Переднее смещение головы: голова смещена кпереди от вертикальной оси тела.",
+  img_c06:"Сагиттальное КТ детально C0–C2. Задокументирована ориентация сустава C0–C1 и взаимоотношение C1–C2.",
+  img_c07:"Угловое измерение на кранио-цервикальном переходе: 12,75° отклонение от горизонтального референса. Жёлтая линия: горизонтальный референс. Красная пунктирная: реальный угол основания черепа.",
+  img_c08:"Фронтальная рентгенограмма грудной клетки. Сколиотическая дуга грудного отдела, уходящая влево — компенсация правостороннего смещения C0.",
+  img_c09:"Боковая рентгенограмма торакопоясничного отдела. Усиленный кифоз со сглаживанием поясничного лордоза — нижестоящее следствие грудной компенсации.",
+  narr_title:"Чтение архива",
+  narr_p1:"Этот случай иллюстрирует то, что PRIMORDIS называет архивом компенсации: накопленная структурная запись того, как тело поддерживало равновесие несмотря на первичное смещение, которое оно не способно скорректировать самостоятельно.",
+  narr_p2:"Отклонение 12,75° на кранио-цервикальном переходе — не вся история. Это измерение первичного события. Всё, что находится ниже — сколиотическая дуга, торакопоясничный кифоз, асимметрия рёберных дуг — это ответ тела на это первичное событие. Каждая структура выполняет свою задачу. Ни одна из них не функционирует неправильно.",
+  narr_p3:"Клинический вопрос, который ставит этот случай — не «какой из этих находок лечить?». Это: «если бы первичное смещение в C0 было устранено, какие из нижестоящих компенсаций тело выбрало бы отпустить самостоятельно?»",
+  obs_symp:"Предъявляемые симптомы",obs_symp_v:"Цервикогенная головная боль, правосторонняя. Хроническое шейное напряжение. Межлопаточная нагрузка. Когнитивная усталость.",
+  obs_nav:"Статус навигации",obs_nav_v:"<strong>В процессе.</strong> Первичная оценка завершена. Приоритет: конфигурация C0. Наблюдение каскада ведётся.",
+  obs_open:"Открытые наблюдения",obs_open_v:"Ответ грудной нагрузки после вмешательства. Поясничная траектория. Изменения параметров состояния — в трекинге.",
+  case_disc:"<b>Наблюдательная запись.</b> Этот случай документирует конфигурацию и её цепь компенсаций. Он не является отчётом о результатах лечения. Все находки — наблюдения, а не диагнозы. Данная запись не является медицинской рекомендацией.",
+  more_title:"6 000+ случаев в архиве.",
+  more_lead:"Полная библиотека случаев является эмпирической базой исследовательской программы PRIMORDIS. Случаи готовятся к структурированной публикации.",
+  more_btn:"→ Исследовательская программа",
+  cta_title:"Начните свою собственную оценку.",
+  cta_lead:"Каждый случай в этой библиотеке начинался с первой оценки. Карта конфигурации — отправная точка навигации.",
+  cta_btn1:"Запросить оценку",cta_btn2:"Как работает оценка",
+  f_line2:"Часть формирующейся дисциплины «Антропономия».",
+  f_disc:"Образовательный и исследовательский контент. Не является медицинской рекомендацией.",
+  f_rights:"© 2026 PRIMORDIS. Наблюдательные записи. Визуализация с согласия пациента."
+}
+};
+
+let currentLang="en", currentTheme="dark";
+(function(){
+  const nav=(navigator.language||"en").toLowerCase();
+  if(nav.startsWith("ru")||nav.startsWith("uk")||nav.startsWith("kk")||nav.startsWith("ky")||nav.startsWith("uz")) currentLang="ru";
+  else if(nav.startsWith("de")) currentLang="de";
+})();
+
+function applyLang(lang){
+  const dict=I18N[lang]||I18N.en;
+  currentLang=lang;
+  document.querySelectorAll("[data-i18n]").forEach(el=>{
+    const k=el.getAttribute("data-i18n");
+    if(dict[k]!==undefined) el.innerHTML=dict[k];
+  });
+  document.documentElement.lang=lang;
+  document.documentElement.dir=lang==="ar"?"rtl":"ltr";
+  document.querySelectorAll(".lang button,.drawer-lang button").forEach(b=>b.classList.toggle("on",b.dataset.lang===lang));
+}
+
+function applyTheme(t){
+  currentTheme=t;
+  document.documentElement.setAttribute("data-theme",t);
+  const icon=document.getElementById("themeIcon");
+  icon.innerHTML=t==="dark"
+    ?'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>'
+    :'<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>';
+}
+
+document.querySelectorAll(".lang button,.drawer-lang button").forEach(b=>b.addEventListener("click",()=>applyLang(b.dataset.lang)));
+document.getElementById("themeBtn").addEventListener("click",()=>applyTheme(currentTheme==="dark"?"light":"dark"));
+
+// drawer
+const burger=document.getElementById("burgerBtn"),drawer=document.getElementById("mobileDrawer"),overlay=document.getElementById("drawerOverlay"),dClose=document.getElementById("drawerClose");
+function openDrawer(){drawer.classList.add("open");overlay.classList.add("open");drawer.setAttribute("aria-hidden","false");burger.setAttribute("aria-expanded","true");document.body.style.overflow="hidden";}
+function closeDrawer(){drawer.classList.remove("open");overlay.classList.remove("open");drawer.setAttribute("aria-hidden","true");burger.setAttribute("aria-expanded","false");document.body.style.overflow="";}
+burger&&burger.addEventListener("click",openDrawer);
+dClose&&dClose.addEventListener("click",closeDrawer);
+overlay&&overlay.addEventListener("click",closeDrawer);
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){ closeDrawer(); closeLightbox(); }});
+document.querySelectorAll(".drawer-links a").forEach(a=>a.addEventListener("click",closeDrawer));
+
+// lightbox
+const lb=document.getElementById("lightbox"),lbImg=document.getElementById("lbImg"),lbCap=document.getElementById("lbCaption"),lbClose=document.getElementById("lbClose");
+function openLightbox(src,cap){lbImg.src=src;lbCap.textContent=cap||"";lb.classList.add("open");document.body.style.overflow="hidden";}
+function closeLightbox(){lb.classList.remove("open");document.body.style.overflow="";}
+document.querySelectorAll(".img-frame[data-lb-src]").forEach(el=>{
+  el.style.cursor="zoom-in";
+  el.addEventListener("click",()=>openLightbox(el.dataset.lbSrc,el.dataset.lbCap));
+});
+lb&&lb.addEventListener("click",e=>{if(e.target===lb) closeLightbox();});
+lbClose&&lbClose.addEventListener("click",closeLightbox);
+
+// reveal
+const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}});},{threshold:0.04});
+document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+
+applyLang(currentLang);
+applyTheme("dark");
+</script>
+</body>
+</html>
